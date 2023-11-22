@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate') %>
+
+<%- include('../partials/navbar') %>
+
+
+<div class="container " style="
+background-color: white;
+margin-top: 40px;
+padding-top:30px;
+padding-left:100px;
+padding-right:100px;
+border-radius:15px;
+">
+
+    <form method="post">
+        <div style="text-align: center;">
+            <label for="article" style="font-size: 20px;">White an article:</label>
+        </br>
+            <textarea id="summernote" name="blog[article]"><%- blog.article %></textarea>
+        </div>
+        <button id="articleSubmit">Submit The Article</button>
+    </form>
+
+    
+    <script>
+        $(document).ready(function() {
+            $('textarea#summernote').summernote({
+                placeholder: 'Type feedback:',
+                tabsize: 2,
+                height: 300,
+          toolbar: [
+
+                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+            ,
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+              ],
+              });
+          });
+
+          $('textarea#summernote').summernote('insertImage', url);
+              
+    </script>
+</div>

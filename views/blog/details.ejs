@@ -1,0 +1,12 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+    <div>
+        <a href="/blog/<%= blog.id %>/edit" id="articleSubmit">Edit The Article</a>
+        
+    </div>
+    <%- blog.article %>
+
+
+</div>

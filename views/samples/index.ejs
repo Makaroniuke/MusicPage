@@ -1,0 +1,94 @@
+<% layout('layouts/boilerplate') %>
+
+<%- include('../partials/navbar') %>
+
+
+<div class="container">
+    <a href="/samples/new" id="articleSubmit">Add New Sample</a>
+
+    <div class="sample">
+      <table style="width:100%">
+        
+        <tr>
+          <th>Pack</th>
+          <th>Play</th>
+          <th>Artist</th>
+          <th>Name</th>
+          <th>Sample</th>
+          <th></th>
+        </tr>
+        <div id="waveform-data" data-waveforms="<%= JSON.stringify(samples) %>"></div>
+          <% for (let i = 0; i < samples.length; i++){ %>
+            
+            <tr>
+              <td>
+                <img style="width: 30px; height: 30px;"  src="/images/bla.jpeg" alt="">
+              </td>
+              
+              <td> 
+                <img style="  height: 50px;
+                width: 50px;
+                filter: grayscale(100%);
+              "  id="play<%= i %>" src="/images/play.png">
+              </td>
+              <td>Alfreds Futterkiste</td>
+              <td><%= samples[i].name %></td>
+              <script type="text/javascript" src="/scripts/waveform.js"></script>
+              <td id="waveform<%= i %>"  name="waveform" ></td>
+              <td><a style="border: none;" href="https://res.cloudinary.com/duivzmmgh/video/upload/fl_attachment/<%= samples[i].filename %>"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+              </svg> </a></td>
+            </tr>
+          <% } %>
+        
+        
+      </table>
+
+    </div>
+
+
+</div>
+
+<script>
+  var waveformsData = JSON.parse(document.getElementById('waveform-data').getAttribute('data-waveforms'));
+  console.log(waveformsData)
+
+  var play = [];
+  for (let i = 0; i < waveformsData.length; i++){ 
+    const str = 'play' + i;
+    play[str]  = document.getElementById('play'+i)
+
+    const wavesurfer = WaveSurfer.create({
+        container: '#waveform'+i,
+        waveColor: '#bebebe',
+        progressColor: '#478ac9',
+        barWidth: 4,
+        responsive: true,
+        height: 50,
+        width: 200,
+        barRadius: 4,
+        interact: true,
+        url: waveformsData[i].sampleUrl
+    })
+
+    play[str].onclick = function () {
+      wavesurfer.playPause()
+      if (play[str].src.includes('play.png')) {
+        play[str].src = '/images/pause.png'
+      }
+      else {
+        play[str].src = '/images/play.png'
+      }
+    }
+
+  }
+
+
+
+
+
+ 
+
+     
+</script>

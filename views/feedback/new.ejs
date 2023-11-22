@@ -1,0 +1,69 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+
+
+
+<div class="container " style="
+background-color: white;
+margin-top: 70px;
+padding-top:30px;
+padding-left:100px;
+padding-right:100px;
+border-radius:15px">
+
+<p>audio garsas</p>
+
+    <form method="post">
+        <!-- <div>
+            <label for="name">Track name:</label>
+            <input id="name" type="text"> 
+        </div> -->
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="summernote" name="description"></textarea>
+            
+        </div>
+
+        <!-- <div>
+            <label for="song">Choose track:</label>
+            <input type="file" accept="audio/mp3, audio/wav">
+        </div> -->
+        <button >Submit</button>
+    </form>
+
+    
+    <script>
+
+
+        $(document).ready(function() {
+            $('textarea#summernote').summernote({
+                placeholder: 'Type feedback:',
+                tabsize: 2,
+                height: 300,
+          toolbar: [
+
+                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+            ,
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+              ],
+              });
+          });
+
+          $('textarea#summernote').summernote('insertImage', url);
+          
+          
+
+          
+    </script>
+</div>
