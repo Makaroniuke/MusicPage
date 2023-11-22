@@ -3,12 +3,12 @@ const ejsmate = require('ejs-mate')
 const path = require('path')
 const session = require('express-session')
 
-const User = require('../YelpCamp-main/models/user')
-const Blog = require('../YelpCamp-main/models/blog')
-const Sample = require('../YelpCamp-main/models/sample')
+const User = require('../MusicPage/models/user')
+const Blog = require('../MusicPage/models/blog')
+const Sample = require('../MusicPage/models/sample')
 
 const multer = require('multer')
-const { audioStorage, imageStorage } = require('../YelpCamp-main/cloudinary')
+const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
 const audioUpload = multer({ storage: audioStorage })
 const imageUpload = multer({ storage: imageStorage })
 

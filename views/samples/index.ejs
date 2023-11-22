@@ -52,8 +52,6 @@
 
 <script>
   var waveformsData = JSON.parse(document.getElementById('waveform-data').getAttribute('data-waveforms'));
-  console.log(waveformsData)
-
   var play = [];
   for (let i = 0; i < waveformsData.length; i++){ 
     const str = 'play' + i;
@@ -81,14 +79,9 @@
         play[str].src = '/images/play.png'
       }
     }
+    wavesurfer.on('finish', function () {
+      play[str].src = '/images/play.png'});
 
   }
-
-
-
-
-
- 
-
-     
+  
 </script>
