@@ -563,7 +563,8 @@ a {
 }
 
 
-.sample {
+.sample,
+.track {
   padding-top: 100px;
   /* border: 2px solid green; */
 }

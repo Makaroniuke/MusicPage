@@ -6,6 +6,7 @@ const session = require('express-session')
 const User = require('../MusicPage/models/user')
 const Blog = require('../MusicPage/models/blog')
 const Sample = require('../MusicPage/models/sample')
+const Track = require('../MusicPage/models/track')
 
 const multer = require('multer')
 const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
@@ -106,8 +107,9 @@ app.post('/samples/new', audioUpload.single('sample'), async (req, res) => {
 
 
 
-app.get('/feedback', (req, res) => {
-    res.render('feedback')
+app.get('/feedback', async (req, res) => {
+    const tracks = await Track.find({})
+    res.render('feedback', { tracks })
 })
 app.get('/feedback/new', (req, res) => {
     res.render('feedback/new')
@@ -117,8 +119,15 @@ app.post('/feedback/new', (req, res) => {
     res.send(req.body)
 })
 
-app.get('/addForFeedback', (req, res) => {
-    res.render('addForFeedback')
+app.get('/feedback/uploadTrack', (req, res) => {
+    res.render('feedback/uploadTrack')
+})
+
+app.post('/feedback/uploadTrack', audioUpload.single('track'), async (req, res) => {
+    const { trackName, description } = req.body
+    const track = new Track({ filename: req.file.filename, name: trackName, description: description, url: req.file.path })
+    await track.save()
+    res.redirect('/feedback')
 })
 
 app.post('/feedback', (req, res) => {
@@ -172,4 +181,12 @@ app.get('/blog/:id', async (req, res) => {
         return res.redirect(`/blog`)
     }
     res.render('blog/details', { blog })
+})
+
+app.get('/feedback/:id', async (req, res) => {
+    const track = await Track.findById(req.params.id)
+    if (!track) {
+        return res.redirect(`/feedback`)
+    }
+    res.render('feedback/new', { track })
 })

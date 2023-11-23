@@ -6,13 +6,26 @@
 
 <div class="container " style="
 background-color: white;
-margin-top: 70px;
+
 padding-top:30px;
 padding-left:100px;
 padding-right:100px;
 border-radius:15px">
 
-<p>audio garsas</p>
+    <div id="waveform-data" data-waveforms="<%= JSON.stringify(track) %>"></div>
+    <div>
+        <p>Track name: <%= track.name %></p>
+        <p>Description: <%= track.description %></p>
+        <div style="display: flex; align-items:center;">
+            <img style="  height: 50px;
+                        width: 50px;
+                        filter: grayscale(100%);
+                        margin-right: 10px;
+                        
+                    "  id="play" src="/images/play.png">
+            <div id="waveform"></div>
+        </div>
+    </div>
 
     <form method="post">
         <!-- <div>
@@ -66,4 +79,38 @@ border-radius:15px">
 
           
     </script>
+
+    <script>
+        var waveformsData = JSON.parse(document.getElementById('waveform-data').getAttribute('data-waveforms'));
+          var play= document.getElementById('play')
+          console.log(waveformsData)
+      
+          const wavesurfer = WaveSurfer.create({
+              container: '#waveform',
+              waveColor: '#bebebe',
+              progressColor: '#478ac9',
+              barWidth: 4,
+              responsive: true,
+              height: 100,
+              width: 1000,
+              barRadius: 4,
+              interact: true,
+              url: waveformsData.url
+          })
+      
+          play.onclick = function () {
+            wavesurfer.playPause()
+            if (play.src.includes('play.png')) {
+              play.src = '/images/pause.png'
+            }
+            else {
+              play.src = '/images/play.png'
+            }
+          }
+          wavesurfer.on('finish', function () {
+            play.src = '/images/play.png'});
+      
+        
+        
+      </script>
 </div>

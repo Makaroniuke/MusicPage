@@ -1,2 +1,1 @@
-# MusicPage
-Moduliui "Interaktyvios interneto technologijos"
+Moduliui "Interaktycios interneto technologijos"

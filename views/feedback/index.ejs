@@ -5,10 +5,17 @@
 
 <div class="container">
     <div>
-        <a href="addForFeedback" id="articleSubmit">Upload Track For Feedback</a>
+        <a href="feedback/uploadTrack" id="articleSubmit">Upload Track For Feedback</a>
     </div>
-    <div>
+    <!-- <div>
         <a href="feedback/new" id="articleSubmit">Give Feedback</a>
+    </div> -->
+
+    <div class="track">
+        <%= tracks[0].description %>
+        <div>
+            <a href="feedback/<%= tracks[0].id %>" id="articleSubmit">Give Feedback</a>
+        </div>
     </div>
 
     <!-- <br><br>
