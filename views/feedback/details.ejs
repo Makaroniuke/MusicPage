@@ -1,0 +1,105 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+
+
+
+<div class="container " style="
+background-color: white;
+
+padding-top:30px;
+padding-left:100px;
+padding-right:100px;
+padding-bottom:100px;
+border-radius:15px">
+
+    <div id="waveform-data" data-waveforms="<%= JSON.stringify(feedback.track) %>"></div>
+    <div>
+        <p><b>Track name:</b> <%= feedback.track.name %></p>
+        <p></p>
+        <p><b>Description:</b></p>
+        <p> <%= feedback.track.description %></p>
+        <div style="display: flex; align-items:center; margin-top:15px; margin-bottom: 30px">
+            <img style="  height: 50px;
+                        width: 50px;
+                        filter: grayscale(100%);
+                        margin-right: 10px;
+                        
+                    "  id="play" src="/images/play.png">
+            <div id="waveform"></div>
+        </div>
+    </div>
+
+    <div>
+        <p><%- feedback.review %></p>
+    </div>
+
+    
+    <script>
+
+
+        $(document).ready(function() {
+            $('textarea#summernote').summernote({
+                placeholder: 'Type feedback:',
+                tabsize: 2,
+                height: 300,
+          toolbar: [
+
+                ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                ['remove', ['removeMedia']]
+            ,
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+              ],
+              });
+          });
+
+          $('textarea#summernote').summernote('insertImage', url);
+          
+          
+
+          
+    </script>
+
+    <script>
+        var waveformsData = JSON.parse(document.getElementById('waveform-data').getAttribute('data-waveforms'));
+          var play= document.getElementById('play')
+          console.log(waveformsData)
+      
+          const wavesurfer = WaveSurfer.create({
+              container: '#waveform',
+              waveColor: '#bebebe',
+              progressColor: '#478ac9',
+              barWidth: 4,
+              responsive: true,
+              height: 100,
+              width: 1000,
+              barRadius: 4,
+              interact: true,
+              url: waveformsData.url
+          })
+      
+          play.onclick = function () {
+            wavesurfer.playPause()
+            if (play.src.includes('play.png')) {
+              play.src = '/images/pause.png'
+            }
+            else {
+              play.src = '/images/play.png'
+            }
+          }
+          wavesurfer.on('finish', function () {
+            play.src = '/images/play.png'});
+      
+        
+        
+      </script>
+</div>

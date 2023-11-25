@@ -1,0 +1,84 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+<div class="container">
+    <div style="display: flex; flex-direction:column; justify-content:center; align-items: center; margin-top:30px ">
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 200px; width:200px;">
+        <h4>Usernameeeeeeeeeeeeeeeee</h4>
+        <h6>@username</h6>
+        <p>IG: blabla</p>
+        <hr style="width:100%;margin-top:20px;">
+    </div>
+
+    <div class="sample">
+
+        
+
+          <div id="waveform-data" data-waveforms="<%= JSON.stringify(tracks) %>"></div>
+            <% for (let i = 0; i < tracks.length; i++){ %>
+            <div style="margin-bottom: 50px; border: 1px solid #e6e6e6; border-radius:5px; padding: 20px 20px 20px 20px">
+                <div style="display:flex">
+                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
+                    <p>@username  <sub style="padding-left: 20px;"><%= tracks[i].date.toLocaleDateString() %></sub></p>
+                    
+                    
+                </div>
+
+                <p style="margin: 0 40px 0 40px;"> <%= tracks[i].description %></p>
+                <div style="display: flex; align-items:center; margin-top:15px; margin-bottom: 30px">
+                    <img style="  height: 50px;
+                                width: 50px;
+                                filter: grayscale(100%);
+                                margin-right: 10px;
+                                
+                            "  id="play<%= i %>" src="/images/play.png">
+                    <div id="waveform<%= i %>"></div>
+                </div>
+                <!-- <p><b>Track name:</b> <%= tracks[i].name %></p> -->
+                
+            </div>
+            <hr style="width:100%; background: #478ac9; height: 1px; margin-top:20px;">
+            <% } %>
+       
+
+      </div>
+    
+</div>
+
+
+<script>
+    var waveformsData = JSON.parse(document.getElementById('waveform-data').getAttribute('data-waveforms'));
+    var play = [];
+    for (let i = 0; i < waveformsData.length; i++){ 
+      const str = 'play' + i;
+      play[str]  = document.getElementById('play'+i)
+  
+      const wavesurfer = WaveSurfer.create({
+          container: '#waveform'+i,
+          waveColor: '#bebebe',
+          progressColor: '#478ac9',
+          barWidth: 4,
+          responsive: true,
+          height: 90,
+          width: 1000,
+          barRadius: 4,
+          interact: true,
+          url: waveformsData[i].url
+      })
+  
+      play[str].onclick = function () {
+        wavesurfer.playPause()
+        if (play[str].src.includes('play.png')) {
+          play[str].src = '/images/pause.png'
+        }
+        else {
+          play[str].src = '/images/play.png'
+        }
+      }
+      wavesurfer.on('finish', function () {
+        play[str].src = '/images/play.png'});
+  
+    }
+    
+  </script>
+  

@@ -7,21 +7,29 @@
     <div>
         <a href="feedback/uploadTrack" id="articleSubmit">Upload Track For Feedback</a>
     </div>
-    <!-- <div>
-        <a href="feedback/new" id="articleSubmit">Give Feedback</a>
-    </div> -->
 
-    <div class="track">
-        <%= tracks[0].description %>
-        <div>
-            <a href="feedback/<%= tracks[0].id %>" id="articleSubmit">Give Feedback</a>
-        </div>
-    </div>
-
-    <!-- <br><br>
-    <section class="articlePost">
-
-    </section> -->
+    <div style="padding-top:50px; display: flex; flex-wrap:wrap;">
+    
+    
+        <% for(let track of tracks){ %>
+            <div class="articlePost" >
+                <img src="/images/bcb24d828f583977847aabfbc2d4826f57051e9db2b7a0d69b5561fd534202a7aec4d86c91374ab503a0d2117445be2ef7b2fd65fd19f226a9750c_1280.jpg" alt="" style="height: 150px; width:250px;">
+    
+                    <h4><%= track.name %></h4>
+                    <p><%= track.description %></p> 
+                    <p><%= track.date.toLocaleDateString() %></p>
+                    <div> 
+                        <a style=" float:none" href="/feedback/new/<%= track.id %>" id="articleSubmit">Give feedback</a>
+                    </div>
+                    <div> 
+                        <a style=" float:none" href="/feedback/new/<%= track.id %>/edit" id="articleSubmit">Edit feedback</a>
+                    </div>
+                    <div>
+                        <a style=" float:none" href="/feedback/details/<%= track.id %>" id="articleSubmit">Check feedback</a>
+                    </div>
+                
+                </div>
+        <% } %>
     
 
 

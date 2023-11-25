@@ -7,19 +7,15 @@ const FeedbackSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    name: {
+    review: {
         type: String,
         required: true
     },
-    sampleUrl: {
-        type: String,
-        required: true
-    },
-    author: {
+    track: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Track'
     },
 
 })
 
-module.exports = mongoose.model('Sample', SampleSchema)
+module.exports = mongoose.model('Feedback', FeedbackSchema)

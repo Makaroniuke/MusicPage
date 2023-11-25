@@ -3,27 +3,28 @@
 <%- include('../partials/navbar') %>
 
 
-<div class="container">
-    <div>
-        <a href="/blog/new" id="articleSubmit">Create New Article</a>
+<div class="container" >
+    <div >
+        <a  href="/blog/new" id="articleSubmit">Create New Article</a>
     </div>
+    <div style="padding-top:50px; display: flex; flex-wrap:wrap;">
+    
 
     <br><br>
 
     <% for(let blog of blogs){ %>
-        <section class="articlePost" style="display: flex;">
-            <img src="/images/bcb24d828f583977847aabfbc2d4826f57051e9db2b7a0d69b5561fd534202a7aec4d86c91374ab503a0d2117445be2ef7b2fd65fd19f226a9750c_1280.jpg" alt="" style="height: 200px; width:300px;">
+        <div class="articlePost" >
+            <img src="/images/bcb24d828f583977847aabfbc2d4826f57051e9db2b7a0d69b5561fd534202a7aec4d86c91374ab503a0d2117445be2ef7b2fd65fd19f226a9750c_1280.jpg" alt="" style="height: 150px; width:250px;">
 
-            <div style="justify-content:end; padding-left:25px;">
                 <h4>News</h4>
                 <p>Read about latest news</p> 
                 <p><%= blog.date.toLocaleDateString() %></p>
                 <div>
                     
-                    <a href="/blog/<%= blog.id %>" id="articleSubmit">Read More</a>
+                    <a style=" float:none" href="/blog/<%= blog.id %>" id="articleSubmit">Read More</a>
                 </div>
+            
             </div>
-        </section>
     <% } %>
 
     
@@ -31,7 +32,7 @@
 
 
 
-
+</div>
 
 
 </div>

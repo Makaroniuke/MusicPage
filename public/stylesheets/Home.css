@@ -553,7 +553,7 @@ a {
   background-color: white;
   padding: 5px 20px 5px 20px;
   border: 2px solid #478ac9;
-  margin-left: -100px;
+  /* margin-left: -100px; */
 }
 
 .articlePost {
@@ -566,5 +566,4 @@ a {
 .sample,
 .track {
   padding-top: 100px;
-  /* border: 2px solid green; */
 }

@@ -7,6 +7,7 @@ const User = require('../MusicPage/models/user')
 const Blog = require('../MusicPage/models/blog')
 const Sample = require('../MusicPage/models/sample')
 const Track = require('../MusicPage/models/track')
+const Feedback = require('../MusicPage/models/feedback')
 
 const multer = require('multer')
 const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
@@ -115,9 +116,7 @@ app.get('/feedback/new', (req, res) => {
     res.render('feedback/new')
 })
 
-app.post('/feedback/new', (req, res) => {
-    res.send(req.body)
-})
+
 
 app.get('/feedback/uploadTrack', (req, res) => {
     res.render('feedback/uploadTrack')
@@ -154,6 +153,11 @@ app.get('/login', (req, res) => {
     res.render('login')
 })
 
+app.get('/profile', async (req, res) => {
+    const tracks = await Track.find({})
+    res.render('profile', { tracks })
+})
+
 app.post('/login', (req, res) => {
 
 })
@@ -183,10 +187,39 @@ app.get('/blog/:id', async (req, res) => {
     res.render('blog/details', { blog })
 })
 
-app.get('/feedback/:id', async (req, res) => {
+app.get('/feedback/new/:id/edit', async (req, res) => {
+    const feedback = await Feedback.findById(req.params.id).populate('track')
+    if (!feedback) {
+        return res.redirect(`/feedback`)
+    }
+    res.render('feedback/edit', { feedback })
+})
+
+app.get('/feedback/new/:id', async (req, res) => {
     const track = await Track.findById(req.params.id)
     if (!track) {
         return res.redirect(`/feedback`)
     }
     res.render('feedback/new', { track })
 })
+
+app.post('/feedback/new/:id', async (req, res) => {
+    const { review } = req.body
+    const { id } = req.params;
+    const track = await Track.findById(id)
+    const feedback = new Feedback({ _id: track._id, review: review, track: track })
+    // res.send(feedback)
+    await feedback.save()
+    return res.redirect(`/feedback/details/${feedback._id}`)
+})
+
+app.get('/feedback/details/:id', async (req, res) => {
+    const feedback = await Feedback.findById(req.params.id).populate('track')
+    res.render('feedback/details', { feedback })
+    // if (!track) {
+    //     return res.redirect(`/feedback`)
+    // }
+    // res.render('feedback/new', { track })
+})
+
+

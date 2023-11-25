@@ -10,13 +10,16 @@ background-color: white;
 padding-top:30px;
 padding-left:100px;
 padding-right:100px;
+padding-bottom:100px;
 border-radius:15px">
 
     <div id="waveform-data" data-waveforms="<%= JSON.stringify(track) %>"></div>
     <div>
-        <p>Track name: <%= track.name %></p>
-        <p>Description: <%= track.description %></p>
-        <div style="display: flex; align-items:center;">
+        <p><b>Track name:</b> <%= track.name %></p>
+        <p></p>
+        <p><b>Description:</b></p>
+        <p> <%= track.description %></p>
+        <div style="display: flex; align-items:center; margin-top:15px; margin-bottom: 30px">
             <img style="  height: 50px;
                         width: 50px;
                         filter: grayscale(100%);
@@ -28,13 +31,14 @@ border-radius:15px">
     </div>
 
     <form method="post">
+
         <!-- <div>
             <label for="name">Track name:</label>
             <input id="name" type="text"> 
         </div> -->
         <div>
-            <label for="description">Description:</label>
-            <textarea id="summernote" name="description"></textarea>
+            <label for="review">Leave a review:</label>
+            <textarea id="summernote" name="review"></textarea>
             
         </div>
 
@@ -42,7 +46,7 @@ border-radius:15px">
             <label for="song">Choose track:</label>
             <input type="file" accept="audio/mp3, audio/wav">
         </div> -->
-        <button >Submit</button>
+        <button id="articleSubmit">Submit</button>
     </form>
 
     
