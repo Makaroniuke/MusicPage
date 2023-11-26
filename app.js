@@ -124,7 +124,7 @@ app.get('/feedback/uploadTrack', (req, res) => {
 
 app.post('/feedback/uploadTrack', audioUpload.single('track'), async (req, res) => {
     const { trackName, description } = req.body
-    const track = new Track({ filename: req.file.filename, name: trackName, description: description, url: req.file.path })
+    const track = new Track({ filename: req.file.filename, name: trackName, description: description, forFeedback: true, url: req.file.path })
     await track.save()
     res.redirect('/feedback')
 })
@@ -154,7 +154,7 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/profile', async (req, res) => {
-    const tracks = await Track.find({})
+    const tracks = await Track.find({ forFeedback: false })
     res.render('profile', { tracks })
 })
 
@@ -221,5 +221,33 @@ app.get('/feedback/details/:id', async (req, res) => {
     // }
     // res.render('feedback/new', { track })
 })
+
+app.get('/profile/addTrack', (req, res) => {
+    res.render('profile/addTrack')
+})
+
+app.post('/profile/addTrack', audioUpload.single('track'), async (req, res) => {
+    const { trackName, description } = req.body
+    const track = new Track({ filename: req.file.filename, name: trackName, description: description, forFeedback: false, url: req.file.path })
+    await track.save()
+    res.redirect('/profile')
+})
+
+app.get('/profile/:id/editTrack', async (req, res) => {
+    const track = await Track.findById(req.params.id)
+    if (!track) {
+        return res.redirect(`/feedback`)
+    }
+    res.render('profile/editTrack', { track })
+})
+
+app.post('/profile/:id/editTrack', async (req, res) => {
+    const { trackName, description } = req.body
+    const track = await Track.findByIdAndUpdate(req.params.id, { description: description })
+    await track.save()
+
+    res.redirect('/profile')
+})
+
 
 

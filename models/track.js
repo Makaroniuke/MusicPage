@@ -18,9 +18,8 @@ const TrackSchema = new Schema({
     description: {
         type: String
     },
-    artworkUrl: {
-        type: String,
-        required: true
+    forFeedback: {
+        type: Boolean
     },
     url: {
         type: String,
