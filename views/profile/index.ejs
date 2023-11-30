@@ -35,8 +35,7 @@
 <div class="container">
     <div style="display: flex; flex-direction:column; justify-content:center; align-items: center; margin-top:30px ">
         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 200px; width:200px;">
-        <h4>Usernameeeeeeeeeeeeeeeee</h4>
-        <h6>@username</h6>
+        <h4>@<%= currentUser.username %></h4>
         <p>IG: blabla</p>
         <hr style="width:100%;margin-top:20px;">
     </div>
@@ -54,7 +53,11 @@
                     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
                     <p>@username  <sub style="padding-left: 20px;"><%= tracks[i].date.toLocaleDateString() %></sub></p>
                     <a style=" float:right; margin-left: auto;" href="/profile/<%= tracks[i].id %>/editTrack" id="articleSubmit">Edit Post</a>
-                    
+                    <form class='d-inline' method="POST" action="/profile/<%= tracks[i]._id %>?_method=DELETE ">
+                        <button>
+                          Delete Post
+                        </button>
+                    </form>
                 </div>
 
                 <p style="margin: 0 40px 0 40px;"> <%= tracks[i].description %></p>

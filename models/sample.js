@@ -15,9 +15,19 @@ const SampleSchema = new Schema({
         type: String,
         required: true
     },
+    type: {
+        type: String
+    },
+    key: {
+        type: String
+    },
     sampleUrl: {
         type: String,
         required: true
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 
 

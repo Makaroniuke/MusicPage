@@ -19,8 +19,13 @@
             <!-- </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="forum" style="padding: 10px 20px;">Forum</a> -->
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/samples" style="padding: 10px 20px;">Samples</a>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/feedback" style="padding: 10px 20px;">Feedback</a>
+              <% if(!currentUser){ %>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/register" style="padding: 10px 20px;">Sign Up</a>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/login" style="padding: 10px 20px;">Login</a>
+            <% }else{ %>
+            </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/profile" style="padding: 10px 20px;">Profile</a>
+            </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/logout" style="padding: 10px 20px;">Logout</a>
+            <% } %>
             </li></ul>
         </div>
         <div class="u-custom-menu u-nav-container-collapse">
@@ -32,8 +37,13 @@
             <!-- </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Login.html">Forum</a> -->
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/samples">Samples</a>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/feedback">Feedback</a>
+              <% if(!currentUser){ %>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/register">Sign Up</a>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/login">Login</a>
+            <%}else{  %>
+            </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile">Profile</a>
+            </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/logout">Logout</a>
+              <% } %>
             </li></ul>
             </div>
           </div>

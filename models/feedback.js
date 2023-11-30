@@ -15,6 +15,10 @@ const FeedbackSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Track'
     },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 
 })
 

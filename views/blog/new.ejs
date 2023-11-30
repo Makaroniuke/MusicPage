@@ -9,18 +9,22 @@ margin-top: 40px;
 padding-top:30px;
 padding-left:100px;
 padding-right:100px;
+margin-bottom: 100px;
 border-radius:15px;
 ">
 
-    <form method="post" enctype="multipart/form-data">
+    <form id="myForm" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div>
-            <label for="image">Select image:</label>
-            <input type="file" id="image" name="image" >
+            <input required type="file" id="image" name="image" class="form-control form-control-lg" >
+            <label for="image">Select Cover Image</label>
         </div>
-        <div style="text-align: center;">
-            <label for="article" style="font-size: 20px;">White an article:</label>
+        <div class="form-outline mb-4">
+          <input required  type="text" id="topic" name="topic" class="form-control form-control-lg" />
+          <label class="form-label" for="topic">Topic</label> 
+        </div>
+        <div >
         </br>
-            <textarea id="summernote" name="article"></textarea>
+            <textarea required id="summernote" name="article"></textarea>
         </div>
         <button id="articleSubmit">Submit The Article</button>
     </form>
@@ -31,7 +35,7 @@ border-radius:15px;
     <script>
         $(document).ready(function() {
             $('textarea#summernote').summernote({
-                placeholder: 'Type feedback:',
+                placeholder: 'Type an article:',
                 tabsize: 2,
                 height: 300,
           toolbar: [
@@ -56,4 +60,32 @@ border-radius:15px;
           $('textarea#summernote').summernote('insertImage', url);
               
     </script>
+
+    <script>
+        $(document).ready(function() {
+          // Initialize Summernote
+          $('#summernote').summernote();
+      
+          // Client-side validation on form submit
+          $('#myForm').submit(function(event) {
+            var content = $('#summernote').summernote('code');
+      
+            // Check for forbidden words
+            if (containsForbiddenWords(content)) {
+              alert('Scripts are not allowed!');
+              event.preventDefault(); // Prevent form submission
+            }
+          });
+      
+          function containsForbiddenWords(content) {
+            var forbiddenWords = ['script']; // Add your forbidden words here
+            var lowerContent = content.toLowerCase();
+      
+            return forbiddenWords.some(function(word) {
+              return lowerContent.includes(word);
+            });
+          }
+        });
+      </script>
 </div>
+<script src="/scripts/validateForms.js"></script>

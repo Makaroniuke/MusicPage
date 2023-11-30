@@ -2,19 +2,25 @@ const express = require('express')
 const ejsmate = require('ejs-mate')
 const path = require('path')
 const session = require('express-session')
+const multer = require('multer')
+const methodOverride = require('method-override')
+const mongoose = require('mongoose');
+const passport = require('passport')
+const localStrategy = require('passport-local')
+
 
 const User = require('../MusicPage/models/user')
 const Blog = require('../MusicPage/models/blog')
 const Sample = require('../MusicPage/models/sample')
 const Track = require('../MusicPage/models/track')
 const Feedback = require('../MusicPage/models/feedback')
+const { isLoggedIn } = require('../MusicPage/middleware')
 
-const multer = require('multer')
+
 const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
 const audioUpload = multer({ storage: audioStorage })
 const imageUpload = multer({ storage: imageStorage })
 
-const mongoose = require('mongoose');
 
 const app = express();
 
@@ -25,7 +31,27 @@ app.use(express.static(__dirname + '/public'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'))
 
+
+
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+app.use(session(sessionConfig))
+
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new localStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 
 mongoose.connect('mongodb://localhost:27017/music-page', {
@@ -38,21 +64,17 @@ db.once('open', () => {
     console.log('Database connected')
 })
 
-// const sessionConfig = {
-//     secret: 'thisshouldbeabettersecret',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         httpOnly: true,
-//         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-//         maxAge: 1000 * 60 * 60 * 24 * 7
-//     }
-// }
-// app.use(session(sessionConfig))
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user
+    next()
+})
 
 
-app.listen(3000, () => {
-    console.log('Serving on port 3000')
+
+
+
+app.listen(3001, () => {
+    console.log('Serving on port 3001')
 })
 
 
@@ -61,25 +83,28 @@ app.get('/', (req, res) => {
 })
 
 app.get('/blog', async (req, res) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('author')
     res.render('blog', { blogs })
 })
 
-app.get('/blog/new', async (req, res) => {
-    res.render('blog/new')
+app.get('/blog/new', isLoggedIn, async (req, res) => {
+    if (req.user.role == 'Producer') {
+        return res.render('blog/new')
+    }
+    res.redirect('/blog')
 })
 
 
-app.post('/blog/new', imageUpload.single('image'), (req, res) => {
+app.post('/blog/new', isLoggedIn, imageUpload.single('image'), async (req, res) => {
     try {
-        // await Blog.deleteMany({});
-        const { article } = req.body
-        console.log(req.body, req.file)
-        // const blog = new Blog({ article })
-        // await blog.save()
-        // res.redirect('/')
-        res.send(req.file)
-    } catch (e) {
+        const { topic, article } = req.body
+        const url = req.file.path
+        const user = await User.findById(req.user.id)
+        const blog = new Blog({ topic: topic, imageUrl: url, article: article, author: user })
+        await blog.save()
+        res.redirect('/blog')
+    }
+    catch (e) {
         console.log(e)
     }
 })
@@ -87,42 +112,42 @@ app.post('/blog/new', imageUpload.single('image'), (req, res) => {
 
 
 app.get('/samples', async (req, res) => {
-    const samples = await Sample.find({})
+    const samples = await Sample.find({}).populate('author')
     res.render('samples', { samples })
-    // res.send(samples)
 })
 
-app.get('/samples/new', (req, res) => {
+app.get('/samples/new', isLoggedIn, (req, res) => {
     res.render('samples/new')
 })
 
-app.post('/samples/new', audioUpload.single('sample'), async (req, res) => {
-    const { sampleName } = req.body
+app.post('/samples/new', isLoggedIn, audioUpload.single('sample'), async (req, res) => {
+    const { sampleName, type, key } = req.body
     const url = req.file.path
     const filename = req.file.filename
-    const sample = new Sample({ name: sampleName, filename: filename, sampleUrl: url })
+    const user = await User.findById(req.user.id)
+    const sample = new Sample({ name: sampleName, filename: filename, sampleUrl: url, type: type, key: key, author: user })
     await sample.save()
-    // console.log(req.body, req.file)
     res.redirect('/samples')
 })
-
 
 
 app.get('/feedback', async (req, res) => {
     const tracks = await Track.find({})
     res.render('feedback', { tracks })
 })
-app.get('/feedback/new', (req, res) => {
-    res.render('feedback/new')
+app.get('/feedback/new', isLoggedIn, (req, res) => {
+    if (req.user.role == 'Producer')
+        res.render('feedback/new')
+    res.redirect('/feedback')
 })
 
 
 
-app.get('/feedback/uploadTrack', (req, res) => {
+app.get('/feedback/uploadTrack', isLoggedIn, (req, res) => {
     res.render('feedback/uploadTrack')
 })
 
-app.post('/feedback/uploadTrack', audioUpload.single('track'), async (req, res) => {
+app.post('/feedback/uploadTrack', isLoggedIn, audioUpload.single('track'), async (req, res) => {
     const { trackName, description } = req.body
     const track = new Track({ filename: req.file.filename, name: trackName, description: description, forFeedback: true, url: req.file.path })
     await track.save()
@@ -139,13 +164,19 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
     try {
+        console.log(req.body)
         const { username, email, password } = req.body
-        const user = new User({ email, username, password })
-        console.log(user)
-        await user.save()
+        const user = new User({ email, username })
+        const registeredUser = await User.register(user, password)
+        await registeredUser.save()
         res.redirect('/')
+        // req.login(registeredUser, err => {
+        //     if (err) return next(err)
+        //     req.flash('success', 'Welcome to Yelp camp')
+        //     res.redirect('/campgrounds')
+        // })
     } catch (e) {
-        console.log(e)
+        console.log(e.message)
     }
 })
 
@@ -153,25 +184,52 @@ app.get('/login', (req, res) => {
     res.render('login')
 })
 
+app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), (req, res) => {
+    res.redirect('/')
+})
+
 app.get('/profile', async (req, res) => {
     const tracks = await Track.find({ forFeedback: false })
     res.render('profile', { tracks })
 })
 
-app.post('/login', (req, res) => {
 
+
+app.get('/profile', isLoggedIn, async (req, res) => {
+    const tracks = await Track.find({ forFeedback: false })
+    // Combine the data from both collections
+    const combinedData = [...data1, ...data2];
+
+    // Sort the combined data by date
+    combinedData.sort((a, b) => a.date - b.date);
+    res.render('profile', { tracks })
+})
+
+app.get('/logout', (req, res) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+    })
+    res.redirect('/')
 })
 
 
-app.get('/blog/:id/edit', async (req, res) => {
+app.get('/blog/:id/edit', isLoggedIn, async (req, res) => {
     const blog = await Blog.findById(req.params.id)
+
     if (!blog) {
         return res.redirect(`/blog`)
     }
+    var scriptRegex = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
+    var checkedBlog = blog.article.replace('<script>', '')
+    var checkedBlog = blog.article.replace('</script>', '')
+    blog.article = checkedBlog
+    res.send(checkedBlog)
     res.render('blog/edit', { blog })
 })
 
-app.post('/blog/:id/edit', async (req, res) => {
+app.put('/blog/:id/edit', isLoggedIn, async (req, res) => {
     const { id } = req.params;
     const blog = await Blog.findByIdAndUpdate(id, { ...req.body.blog })
     await blog.save()
@@ -180,14 +238,14 @@ app.post('/blog/:id/edit', async (req, res) => {
 })
 
 app.get('/blog/:id', async (req, res) => {
-    const blog = await Blog.findById(req.params.id)
+    const blog = await Blog.findById(req.params.id).populate('author')
     if (!blog) {
         return res.redirect(`/blog`)
     }
     res.render('blog/details', { blog })
 })
 
-app.get('/feedback/new/:id/edit', async (req, res) => {
+app.get('/feedback/new/:id/edit', isLoggedIn, async (req, res) => {
     const feedback = await Feedback.findById(req.params.id).populate('track')
     if (!feedback) {
         return res.redirect(`/feedback`)
@@ -195,7 +253,15 @@ app.get('/feedback/new/:id/edit', async (req, res) => {
     res.render('feedback/edit', { feedback })
 })
 
-app.get('/feedback/new/:id', async (req, res) => {
+app.post('/feedback/new/:id/edit', isLoggedIn, async (req, res) => {
+    const feedback = await Feedback.findById(req.params.id).populate('track')
+    if (!feedback) {
+        return res.redirect(`/feedback`)
+    }
+    res.render('feedback/edit', { feedback })
+})
+
+app.get('/feedback/new/:id', isLoggedIn, async (req, res) => {
     const track = await Track.findById(req.params.id)
     if (!track) {
         return res.redirect(`/feedback`)
@@ -203,9 +269,14 @@ app.get('/feedback/new/:id', async (req, res) => {
     res.render('feedback/new', { track })
 })
 
-app.post('/feedback/new/:id', async (req, res) => {
+app.post('/feedback/new/:id', isLoggedIn, async (req, res) => {
+
+
     const { review } = req.body
     const { id } = req.params;
+    // const checkedReview = review.replace(scriptRegex, "");
+    res.send(review)
+
     const track = await Track.findById(id)
     const feedback = new Feedback({ _id: track._id, review: review, track: track })
     // res.send(feedback)
@@ -222,18 +293,18 @@ app.get('/feedback/details/:id', async (req, res) => {
     // res.render('feedback/new', { track })
 })
 
-app.get('/profile/addTrack', (req, res) => {
+app.get('/profile/addTrack', isLoggedIn, (req, res) => {
     res.render('profile/addTrack')
 })
 
-app.post('/profile/addTrack', audioUpload.single('track'), async (req, res) => {
+app.post('/profile/addTrack', isLoggedIn, audioUpload.single('track'), async (req, res) => {
     const { trackName, description } = req.body
     const track = new Track({ filename: req.file.filename, name: trackName, description: description, forFeedback: false, url: req.file.path })
     await track.save()
     res.redirect('/profile')
 })
 
-app.get('/profile/:id/editTrack', async (req, res) => {
+app.get('/profile/:id/editTrack', isLoggedIn, async (req, res) => {
     const track = await Track.findById(req.params.id)
     if (!track) {
         return res.redirect(`/feedback`)
@@ -241,12 +312,30 @@ app.get('/profile/:id/editTrack', async (req, res) => {
     res.render('profile/editTrack', { track })
 })
 
-app.post('/profile/:id/editTrack', async (req, res) => {
+app.post('/profile/:id/editTrack', isLoggedIn, async (req, res) => {
     const { trackName, description } = req.body
     const track = await Track.findByIdAndUpdate(req.params.id, { description: description })
     await track.save()
 
     res.redirect('/profile')
+})
+
+app.delete('/profile/:id', isLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    await Track.findByIdAndRemove(id);
+    res.redirect('/profile')
+})
+
+app.delete('/samples/:id', isLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    await Sample.findByIdAndRemove(id);
+    res.redirect('/samples')
+})
+
+app.delete('/blog/:id', isLoggedIn, async (req, res) => {
+    const { id } = req.params;
+    await Blog.findByIdAndRemove(id);
+    res.redirect('/blog')
 })
 
 

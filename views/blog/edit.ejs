@@ -8,18 +8,22 @@ background-color: white;
 margin-top: 40px;
 padding-top:30px;
 padding-left:100px;
-padding-right:100px;
+padding-right:100px;margin: 100px;
 border-radius:15px;
 ">
 
-    <form method="post">
-        <div style="text-align: center;">
-            <label for="article" style="font-size: 20px;">White an article:</label>
-        </br>
-            <textarea id="summernote" name="blog[article]"><%- blog.article %></textarea>
-        </div>
-        <button id="articleSubmit">Submit The Article</button>
-    </form>
+<form id="myForm" method="post" class="needs-validation" novalidate>
+
+    <div class="form-outline mb-4">
+      <input value="<%= blog.topic %>" required  type="text" id="topic" name="topic" class="form-control form-control-lg" />
+      <label class="form-label" for="topic">Topic</label> 
+    </div>
+    <div >
+    </br>
+        <textarea required id="summernote" name="article"><%= blog.article %></textarea>
+    </div>
+    <button id="articleSubmit" style="padding-bottom: 100px;">Submit The Article</button>
+</form>
 
     
     <script>

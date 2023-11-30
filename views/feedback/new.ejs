@@ -30,7 +30,7 @@ border-radius:15px">
         </div>
     </div>
 
-    <form method="post">
+    <form method="post" id="myForm">
 
         <!-- <div>
             <label for="name">Track name:</label>
@@ -116,5 +116,32 @@ border-radius:15px">
       
         
         
+      </script>
+
+      <script>
+        $(document).ready(function() {
+          // Initialize Summernote
+          $('#summernote').summernote();
+      
+          // Client-side validation on form submit
+          $('#myForm').submit(function(event) {
+            var content = $('#summernote').summernote('code');
+      
+            // Check for forbidden words
+            if (containsForbiddenWords(content)) {
+              alert('Scripts are not allowed!');
+              event.preventDefault(); // Prevent form submission
+            }
+          });
+      
+          function containsForbiddenWords(content) {
+            var forbiddenWords = ['script']; // Add your forbidden words here
+            var lowerContent = content.toLowerCase();
+      
+            return forbiddenWords.some(function(word) {
+              return lowerContent.includes(word);
+            });
+          }
+        });
       </script>
 </div>

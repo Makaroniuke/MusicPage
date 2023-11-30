@@ -545,9 +545,9 @@
   border: 4px solid red;
 }
 
-#articleSubmit,
-a {
+#articleSubmit {
   margin-top: 25px;
+
   color: black;
   float: right;
   background-color: white;
@@ -556,14 +556,32 @@ a {
   /* margin-left: -100px; */
 }
 
+a {
+  color: black;
+  background-color: white;
+  padding: 5px 20px 5px 20px;
+
+}
+
 .articlePost {
   border: 2px solid #478ac9;
   margin: 25px;
-  padding: 30px;
+  padding: 20px;
 }
 
 
 .sample,
 .track {
   padding-top: 100px;
+}
+
+.coverImage {
+
+  width: 50%;
+  height: 50%;
+  object-fit: fill;
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

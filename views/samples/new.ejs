@@ -8,22 +8,34 @@
     <!-- <div class="u-align-center u-black u-container-style u-group u-opacity u-opacity-90 u-group-1" style="margin-top: -400px"> -->
         <div class="u-container-layout u-container-layout-5" >
           
-          <form  method="post"  enctype="multipart/form-data">
+          <form  method="post"  enctype="multipart/form-data" class="needs-validation" novalidate>
 
-            <div class="form-outline mb-4">
-              <input  type="text" id="sampleName" name="sampleName" class="form-control form-control-lg" />
+            <div required class="form-outline mb-4">
+              <input required  type="text" id="sampleName" name="sampleName" class="form-control form-control-lg" />
               <label class="form-label" for="sampleName">Sample Name</label> 
             </div>
 
-            <!-- <div class="form-outline mb-4">
-              <input type="file" id="sampleImage" name="sampleimage" class="form-control form-control-lg" accept="image/png, image/jpeg" />
-              <label class="form-label" for="sampleImage">Sample Image</label>
-            </div> -->
+            <div class="form-outline mb-4">
+              <select required name="type" class="form-control form-control-lg">
+                <option selected value="">Not Selected</option>
+                <option value="Drums">Drums</option>
+                <option value="Synth">Synth</option>
+                <option value="Vocal">Vocal</option>
+                <option value="Instrument">Instrument</option>
+                <option value="Other">Other</option>
+              </select>
+              <label class="form-label" for="type">Sample Type</label> 
+            </div>
 
             <div class="form-outline mb-4">
-                <input type="file" id="sample" name="sample" class="form-control form-control-lg" accept="audio/mp3, audio/wav"  />
+              <input  type="text" id="key" name="key" class="form-control form-control-lg" />
+              <label class="form-label" for="key">Sample Key</label>
+          </div>
+
+            <div class="form-outline mb-4">
+                <input required type="file" id="sample" name="sample" class="form-control form-control-lg" accept="audio/mp3, audio/wav"  />
                 <label class="form-label" for="sample">Sample</label>
-              </div>
+            </div>
 
             <div class="d-flex justify-content-center" >
               <button type="submit"
@@ -35,3 +47,4 @@
 
 
 </div>
+<script src="/scripts/validateForms.js"></script>
