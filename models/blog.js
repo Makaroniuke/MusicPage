@@ -11,6 +11,10 @@ const BlogSchema = new Schema({
         type: String,
         required: true
     },
+    filename: {
+        type: String,
+        required: true
+    },
     article: {
         type: String,
         required: true

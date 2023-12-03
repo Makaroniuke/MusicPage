@@ -11,7 +11,6 @@ const TrackSchema = new Schema({
         type: String,
         required: true
     },
-
     name: {
         type: String,
         required: true
@@ -29,6 +28,10 @@ const TrackSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    feedback: {
+        type: Schema.Types.ObjectId,
+        ref: 'Feedback'
     }
 
 

@@ -16,6 +16,7 @@ border-radius:15px">
     <div id="waveform-data" data-waveforms="<%= JSON.stringify(track) %>"></div>
     <div>
         <p><b>Track name:</b> <%= track.name %></p>
+        <p>By <a href="/profile/<%= track.author.id %>"><%= track.author.username %></a></p>
         <p></p>
         <p><b>Description:</b></p>
         <p> <%= track.description %></p>

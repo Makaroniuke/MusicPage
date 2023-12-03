@@ -570,6 +570,11 @@ a {
 }
 
 
+.deletebutton {
+  border: 2px solid red;
+  background-color: white;
+}
+
 .sample,
 .track {
   padding-top: 100px;
@@ -584,4 +589,9 @@ a {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.noback{
+  background-color: white;
+  border: 0px;
 }

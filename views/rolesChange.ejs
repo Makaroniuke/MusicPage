@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate') %>
+
+<%- include('./partials/navbar') %>
+
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>
+                Username
+            </th>
+            <th>
+                Current Role
+            </th>
+            <th>
+                Change To
+            </th>
+            
+        </tr>
+        <tr>
+            <td>
+                <%= user.username %>
+            </td>
+            <td>
+                <%= user.role %>
+            </td>
+            <td>
+                <form action="" method="post">
+ 
+                    <select class="form-control" name="role" id="role">
+                        <option value="User">User</option>
+                        <option value="Producer">Producer</option>
+                        <option value="Administrator">Administrator</option>
+                    </select>
+                    <button type="submit" id="articleSubmit">Submit</button>
+                </form>
+            </td>
+            <td>
+                
+            </td>
+        
+        </tr>
+    </table>
+</div>

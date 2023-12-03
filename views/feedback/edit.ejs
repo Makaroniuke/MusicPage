@@ -13,12 +13,12 @@ padding-right:100px;
 padding-bottom:100px;
 border-radius:15px">
 
-    <div id="waveform-data" data-waveforms="<%= JSON.stringify(feedback.track) %>"></div>
+    <div id="waveform-data" data-waveforms="<%= JSON.stringify(track) %>"></div>
     <div>
-        <p><b>Track name:</b> <%= feedback.track.name %></p>
+        <p><b>Track name:</b> <%= track.name %></p>
         <p></p>
         <p><b>Description:</b></p>
-        <p> <%= feedback.track.description %></p>
+        <p> <%= track.description %></p>
         <div style="display: flex; align-items:center; margin-top:15px; margin-bottom: 30px">
             <img style="  height: 50px;
                         width: 50px;
@@ -38,7 +38,7 @@ border-radius:15px">
         </div> -->
         <div>
             <label for="review">Leave a review:</label>
-            <textarea id="summernote" name="review"><%- feedback.review %></textarea>
+            <textarea id="summernote" name="review"><%- track.feedback.review %></textarea>
             
         </div>
 
