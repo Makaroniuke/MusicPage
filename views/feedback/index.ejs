@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<%- include('../partials/navbar') %>
+
 
 <div>
     <a href="feedback/uploadTrack" id="articleSubmit" style="margin-right: 20px;">Upload Track For Feedback</a>
@@ -12,9 +12,10 @@
     
         <% for(let track of tracks){ %>
             <div class="articlePost" >
-                <img src="/images/bcb24d828f583977847aabfbc2d4826f57051e9db2b7a0d69b5561fd534202a7aec4d86c91374ab503a0d2117445be2ef7b2fd65fd19f226a9750c_1280.jpg" alt="" style="height: 120px; width:220px;">
+                <img src="<%= track.author.imageUrl %>" alt="" style="height: 120px; width:220px;">
     
                     <h4><%= track.name %></h4> 
+                    <p><a href="/profile/<%= track.author.id %>">By <%= track.author.username %></a></p>
                     <p><%= track.date.toLocaleDateString() %></p>
                     <% if(currentUser && currentUser.role == "Producer") {%>
                         <% if(!track.feedback){ %>

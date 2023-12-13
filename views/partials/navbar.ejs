@@ -2,8 +2,8 @@
 
 <nav class="u-clearfix u-header u-header" id="sec-25af">
     <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
-      <a href="" class="u-image u-logo u-image-1">
-        <img src="images/default-logo.png" class="u-logo-image u-logo-image-1">
+      <a href="/" class="u-image u-logo u-image-1">
+        <h4>Music&You</h4>
       </a>
       <nav class="u-menu u-menu-dropdown u-offcanvas u-menu-1">
         <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px; font-weight: 700; text-transform: uppercase;">
@@ -19,6 +19,9 @@
             <!-- </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="forum" style="padding: 10px 20px;">Forum</a> -->
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/samples" style="padding: 10px 20px;">Samples</a>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/feedback" style="padding: 10px 20px;">Feedback</a>
+              <% if(currentUser && currentUser.role == 'Administrator'){ %>
+              </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/roles" style="padding: 10px 20px;">Change Role</a>
+                <% } %>
               <% if(!currentUser){ %>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/register" style="padding: 10px 20px;">Sign Up</a>
             </li><li class="u-nav-item"><a class="u-border-2 u-border-active-palette-1-base u-border-hover-palette-1-light-1 u-button-style u-nav-link u-text-active-grey-90 u-text-grey-90 u-text-hover-grey-90" href="/login" style="padding: 10px 20px;">Login</a>
@@ -37,11 +40,14 @@
             <!-- </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Login.html">Forum</a> -->
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/samples">Samples</a>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/feedback">Feedback</a>
+              <% if(currentUser && currentUser.role == 'Administrator'){ %>
+              </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/roles">Change role</a>
+                <% } %>
               <% if(!currentUser){ %>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/register">Sign Up</a>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/login">Login</a>
             <%}else{  %>
-            </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile">Profile</a>
+            </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/profile/<%= currentUser._id %>">Profile</a>
             </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/logout">Logout</a>
               <% } %>
             </li></ul>

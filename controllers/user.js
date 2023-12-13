@@ -23,6 +23,7 @@ module.exports.loginForm = (req, res) => {
 }
 
 module.exports.login = (req, res) => {
+    req.flash('success', 'Succesfully logged in')
     res.redirect('/')
 }
 

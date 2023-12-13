@@ -1,6 +1,10 @@
 <% layout('layouts/boilerplate') %>
 
-<%- include('../partials/navbar') %>
+<style>
+  footer{
+    visibility: hidden;
+  }
+</style>
 
 
 <div class="container " style="
@@ -15,7 +19,7 @@ border-radius:15px;
 
     <form id="myForm" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div>
-            <input required type="file" id="image" name="image" class="form-control form-control-lg" >
+            <input accept="image/png, image/jpg" required type="file" id="image" name="image" class="form-control form-control-lg" >
             <label for="image">Select Cover Image</label>
         </div>
         <div class="form-outline mb-4">

@@ -10,10 +10,16 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     },
+    imageUrl:{
+        type: String
+    },
+    filename:{
+        type: String
+    },
     role: {
         type: String,
         enum: ['User', 'Producer', 'Administrator'],
-        default: 'User'
+        default: 'Administrator'
     }
 })
 

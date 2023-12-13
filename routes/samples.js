@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const samplesController = require('../controllers/samples')
 
-const { isLoggedIn } = require('../middleware')
+const { isLoggedIn, isTrackAuthor, isSampleAuthor } = require('../middleware')
 
 const multer = require('multer')
 const { audioStorage, imageStorage } = require('../cloudinary')
@@ -17,10 +17,10 @@ router.route('/new')
     .post(isLoggedIn, audioUpload.single('sample'), samplesController.new)
 
 router.route('/:id')
-    .delete(isLoggedIn, samplesController.delete)
+    .delete(isLoggedIn, isSampleAuthor, samplesController.delete)
 
 router.route('/:id/edit')
-    .get(isLoggedIn, samplesController.editForm)
-    .put(samplesController.edit)
+    .get(isLoggedIn, isSampleAuthor, samplesController.editForm)
+    .put(isTrackAuthor,isSampleAuthor, samplesController.edit)
 
 module.exports = router

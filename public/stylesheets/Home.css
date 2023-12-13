@@ -293,7 +293,7 @@
 }
 
 .u-section-3 .u-sheet-1 {
-  min-height: 520px;
+  min-height: 420px;
 }
 
 .u-section-3 .u-layout-wrap-1 {
@@ -430,7 +430,7 @@
 }
 
 .u-section-4 .u-container-layout-2 {
-  padding: 30px;
+  padding: 10px;
 }
 
 @media (max-width: 1199px) {
@@ -525,10 +525,6 @@
   }
 
 
-}
-
-.register-img {
-  /* filter: grayscale(100%); */
 }
 
 .custom-select.is-valid,

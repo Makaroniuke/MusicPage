@@ -7,24 +7,19 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const passport = require('passport')
 const localStrategy = require('passport-local')
-
+const { cloudinary } = require('../MusicPage/cloudinary')
+const flash = require('connect-flash')
 
 const User = require('../MusicPage/models/user')
 
 const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
-
-
-
-const blogRouter = require('./routes/blog')
-const feedbackRouter = require('./routes/feedback')
-const profileRouter = require('./routes/profile')
-const samplesRouter = require('./routes/samples')
-const roleRouter = require('./routes/role')
-const userRouter = require('./routes/user')
-
-
-
 const app = express();
+
+
+
+
+
+
 
 app.engine('ejs', ejsmate)
 app.set('view engine', 'ejs')
@@ -48,12 +43,27 @@ const sessionConfig = {
     }
 }
 app.use(session(sessionConfig))
+app.use(flash())
+app.use((req,res, next)=>{
+    res.locals.success = req.flash('success')
+    res.locals.error = req.flash('error')
+    next()
+})
+
 
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new localStrategy(User.authenticate()))
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
+
+
+const blogRouter = require('./routes/blog')
+const feedbackRouter = require('./routes/feedback')
+const profileRouter = require('./routes/profile')
+const samplesRouter = require('./routes/samples')
+const roleRouter = require('./routes/role')
+const userRouter = require('./routes/user')
 
 
 mongoose.connect('mongodb://localhost:27017/music-page', {
@@ -90,6 +100,9 @@ app.get('/', (req, res) => {
     res.render('homee')
 })
 
+app.get('*', (req, res) => {
+    res.render('pageNotFound')
+})
 
 
 

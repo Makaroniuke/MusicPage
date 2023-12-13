@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<%- include('../partials/navbar') %>
+
 
 <style>
   .popup {
@@ -28,19 +28,30 @@
   .show {
       display: block;
   }
+  footer{
+  visibility: hidden;}
   h1 {
       color: green;
   }
 </style>
 <div class="container">
     <div style="display: flex; flex-direction:column; justify-content:center; align-items: center; margin-top:30px ">
-        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 200px; width:200px;">
+        <% if(user.imageUrl == ''){ %>
+      <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 200px; width:200px;">
+      <% }else{ %>  
+        <img src="<%= user.imageUrl %>" alt="" style="border-radius: 50%; height: 200px; width:200px;">
+
+        <% } %>
         <h4>@<%= user.username %></h4>
         <p></p>
-        <hr style="width:100%;margin-top:20px;">
+        <% if(currentUser && currentUser.id == user.id){ %>
+          <a href="/profile/<%= user.id %>/editProfile">Edit Profile Picture</a>
+        <% } %>
+        <hr style="width:100%;margin-top:20px;">    
     </div>
-
-    <a style=" float:right" href="/profile/<%= user._id %>/addTrack" id="articleSubmit">New Post</a>
+    <% if(currentUser && currentUser.id == user.id){ %>
+      <a style=" float:right" href="/profile/<%= user._id %>/addTrack" id="articleSubmit">New Post</a>
+    <% } %>
 
     <div class="sample">
 
@@ -52,11 +63,15 @@
               
                 
               <div style="display:flex">
-                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
-                    <p>@<%= user.username %>  <sub style="padding-left: 20px;"><%= tracks[i].date.toLocaleDateString() %></sub></p>
+                <% if(user.imageUrl == ''){ %>
+                  <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
+                  <% }else{ %>  
+                    <img src="<%= user.imageUrl %>" alt="" style="border-radius: 50%; height: 50px; width:50px;">
+            
+                    <% } %>                    <p>@<%= user.username %>  <sub style="padding-left: 20px;"><%= tracks[i].date.toLocaleDateString() %></sub></p>
                     <% if(currentUser.id == user.id){ %>
-                    <a style=" float:right; margin-left: auto;" href="/profile/<%= tracks[i].id %>/editTrack" id="articleSubmit">Edit Post</a>
-                    <form class='d-inline' method="POST" action="/profile/<%= tracks[i]._id %>?_method=DELETE ">
+                    <a style=" float:right; margin-left: auto;" href="/profile/<%= user.id %>/<%= tracks[i].id %>/editTrack" id="articleSubmit">Edit Post</a>
+                    <form class='d-inline' method="POST" action="/profile/<%= user.id %>/<%= tracks[i]._id %>?_method=DELETE ">
                         <button class="deletebutton">
                           Delete Post
                         </button>

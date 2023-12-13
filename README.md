@@ -1,1 +1,1 @@
-Moduliui "Interaktycios interneto technologijos"
+Moduliui "Interaktyvios interneto technologijos"

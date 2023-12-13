@@ -12,7 +12,7 @@ router.route('/register')
 
 router.route('/login')
     .get(userController.loginForm)
-    .post(passport.authenticate('local', { failureRedirect: '/login' }), userController.login)
+    .post(passport.authenticate('local', {failureFlash: 'Username or password is incorrect', failureRedirect: '/login' }), userController.login)
 
 router.route('/logout')
     .get(isLoggedIn, userController.logout)
