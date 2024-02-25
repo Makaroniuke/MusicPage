@@ -2,34 +2,25 @@ const express = require('express')
 const ejsmate = require('ejs-mate')
 const path = require('path')
 const session = require('express-session')
-const multer = require('multer')
 const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 const passport = require('passport')
 const localStrategy = require('passport-local')
-const { cloudinary } = require('../MusicPage/cloudinary')
 const flash = require('connect-flash')
 
 const User = require('../MusicPage/models/user')
 
-const { audioStorage, imageStorage } = require('../MusicPage/cloudinary')
 const app = express();
-
-
-
-
-
 
 
 app.engine('ejs', ejsmate)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, '/public')))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'))
-
 
 
 const sessionConfig = {
@@ -88,13 +79,13 @@ app.use('/', roleRouter)
 app.use('/samples', samplesRouter)
 app.use('/', userRouter)
 
-
-
-
-app.listen(3001, () => {
-    console.log('Serving on port 3001')
+app.listen(3000, () => {
+    console.log('Serving on port 3000')
 })
 
+app.get('/test', (req, res) => {
+    res.render('home')
+})
 
 app.get('/', (req, res) => {
     res.render('homee')

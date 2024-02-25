@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote-bs4.js"></script>
+
+    
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <title>Musico</title>
+</head>
+
+<body  data-lang="en" >
+    <div class="container">
+        <%- include('partials/nav') %>
+    <style>
+        img{
+            width: 100%;
+        }
+        .overlay{
+            position:absolute;
+            top:50%;
+            left:50%;
+            width: 325px;
+            height: 300px;
+            transform:translate(-50%, -50%);
+            background: black; 
+            opacity: 0.9;
+        }
+        h1, p{
+            color: white;
+        }
+        .center{
+            padding-top: 20%;
+            padding-left: 20px;
+            padding-right: 20px;
+            text-align: center;
+        }
+        button{
+            background-color: white; 
+            color:black; 
+            border-radius: 25px;
+            border-style: solid;
+            font-weight: 700;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            opacity: 1;
+            padding: 10px 20px;
+        }
+
+        button:hover{
+            background-color: #ccd3db;
+        }
+        .bigImage{
+            max-width: none; 
+            height:500px;
+            object-fit: cover;
+            display: block;
+            background-size: cover;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+        }
+        .image{
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("/images/6e3bf18091edb92b10d7b23fc70533d5e032195e84dc0dd5823740ba3b78741c8a9f939260babae32de4c15d1ca4f8fb30e789661ea8f4076de184_1280.jpg");
+            background-position: 50% 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+    </style>
+
+
+    <section>
+    <div style="position: relative;">
+        <div class="row" >
+            <div class="col-md" style="display: flex; justify-content:flex-end; align-items:end;">
+                <img style="
+                 width: 95%; height:95%" src="/images/Untitled6.jpg" alt="">
+            </div>
+            <div class="col-md" style="position:relative" >
+                <img style="position:absolute; bottom:0; width: 85%; height: 85%; float: left;" src="/images/photo14607232374837a6dc9d0b212.jpg" alt="">
+            </div>
+        </div>
+        <div>&nbsp;</div>
+        <div class="row">
+            <div class="col-md">
+                <img style="width: 85%; height: 85%; float: right;" src="images/953eab26afa3c9a923782213851ef5a898ec500ec9bcfd78bb9a4ec4308f0a1685aee29be363bb041ea889bb4457d8d30ee5ab4c65cc75f5df1f29_1280.jpg
+                "alt="">
+            </div>
+            <div class="col-md">
+                <img style=" width: 95%; height: 95%" src="images/xa.jpg" alt="">
+            </div>
+        </div>
+        <div class="overlay">
+            <div class="center">
+                <h1 style="font-weight: 400;
+                font-size: 3rem;">Music is Life</h1>
+                <p style="font-style: italic;
+                margin: 16px 0 0;
+                font-size: 1.125rem;">
+                    Unleash your creative potential and turn your musical dreams into reality
+                </p>
+                <button >START NOW</button>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
+</div>
+
+<section>
+    <div class="image" style="height: 750px;">
+        <div style="text-align:center;">
+            <h1 style=" font-size: 6rem;
+            font-weight: 700;
+            margin: 60px auto 10px;">Who we are?</h1>
+            <p style=" font-size: 2rem; padding-left: 50px;padding-right: 50px;"> We're a vibrant community dedicated to inspiring your musical journey. We offer a platform for learning, networking with fellow producers, and sharing your music and samples. Join us in exploring the endless possibilities of music together. </p>
+            <button>Read More</button>
+        </div>
+        
+    </div>
+</section>
+
+<section>
+<div style="margin-top: 100px;">
+
+</div>
+
+</section>
+       
+
+
+
+    
+</body>
+
+
+
+</html>

@@ -9,12 +9,13 @@ module.exports.registerForm = (req, res) => {
 module.exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body
-        const user = new User({ email, username })
+        const user = new User({ email, username, imageUrl: '' })
         const registeredUser = await User.register(user, password)
         await registeredUser.save()
         res.redirect('/')      
     } catch (e) {
-        console.log(e.message)
+        req.flash('error', e.message)
+        res.redirect('/register') 
     }
 }
 

@@ -63,13 +63,12 @@
               
                 
               <div style="display:flex">
-                <% if(user.imageUrl == ''){ %>
-                  <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
+                <% if(user.imageUrl != ''){ %>
+                  <img src="<%= user.imageUrl %>" alt="" style="border-radius: 50%; height: 50px; width:50px;">
                   <% }else{ %>  
-                    <img src="<%= user.imageUrl %>" alt="" style="border-radius: 50%; height: 50px; width:50px;">
-            
+                    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="" style="border-radius: 50%; height: 50px; width:50px;">
                     <% } %>                    <p>@<%= user.username %>  <sub style="padding-left: 20px;"><%= tracks[i].date.toLocaleDateString() %></sub></p>
-                    <% if(currentUser.id == user.id){ %>
+                    <% if(currentUser && currentUser.id == user.id){ %>
                     <a style=" float:right; margin-left: auto;" href="/profile/<%= user.id %>/<%= tracks[i].id %>/editTrack" id="articleSubmit">Edit Post</a>
                     <form class='d-inline' method="POST" action="/profile/<%= user.id %>/<%= tracks[i]._id %>?_method=DELETE ">
                         <button class="deletebutton">
