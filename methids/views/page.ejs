@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="fetchAudio">Fetch Audio</button>
+    <audio controls id="audioPlayer"></audio>
+    <p id="parameter"></p>
+
+
+    <script>
+        function generateRandomNumber() {
+            // Sugeneruoti atsitiktinį skaičių nuo -1 iki 1
+            const randomNumber = Math.random() * 2 - 1;
+          
+            // Apskritinti skaičių iki 1 decimalo taško
+            const roundedNumber = Math.round(randomNumber * 10) / 10;
+          
+            // Paskaičiuoti žingsnio dydį (0.2) kartojant iš apvalinto skaičiaus
+            const stepSize = 0.1;
+            const steppedNumber = Math.round(roundedNumber / stepSize) * stepSize;
+          
+            // Suapvalinti iki dviejų skaičių po kablelio ir konvertuoti į string formatą
+            const roundedSteppedNumber = steppedNumber.toFixed(2);
+          
+            // Konvertuoti atgal į skaičių
+            return parseFloat(roundedSteppedNumber);
+          }
+
+        number = generateRandomNumber()
+        //console.log(random)
+        document.getElementById('fetchAudio').addEventListener('click', function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/processAudio?number=${number}`, true);
+            xhr.responseType = 'blob';
+
+            
+
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    const blob = this.response;
+                    const objectURL = URL.createObjectURL(blob);
+
+
+                    // Arba leisti vartotojui atsisiųsti failą
+                    // const link = document.createElement('a');
+                    // link.href = objectURL;
+                   //  link.download = 'audio.wav';
+                    // link.click();
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.src = objectURL;
+
+                    const param = document.getElementById('parameter');
+                    param.textContent = number.toString()
+
+                }
+            };
+
+            xhr.send();
+        });
+    </script>
+</body>
+</html>
