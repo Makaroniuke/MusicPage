@@ -7,6 +7,8 @@ const mongoose = require('mongoose');
 const passport = require('passport')
 const localStrategy = require('passport-local')
 const flash = require('connect-flash')
+const { spawn } = require('child_process');
+const fs = require('fs');
 
 const User = require('../MusicPage/models/user')
 
@@ -78,6 +80,46 @@ app.use('/profile', profileRouter)
 app.use('/', roleRouter)
 app.use('/samples', samplesRouter)
 app.use('/', userRouter)
+
+
+let number = 0
+
+app.get('/processAudio', (req, res) => {
+  // Sukurkite laikiną failą, kuriuo bus dalinamasi
+  const audioFilePath = 'public/audio/guitar.wav';
+
+  console.log(req.query.number)
+  // Paleiskite Python vaikinio procesą
+  const pythonProcess = spawn('python', ['processAudio.py', audioFilePath, req.query.number]);
+
+  // Pasiruoškite gauti atsakymą iš vaikinio proceso
+  pythonProcess.stdout.on('data', (data) => {
+    // Grąžinkite atsakymą klientui
+    res.send(data);
+  });
+
+  // Obsėrvas klaidoms
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`Python stderr: ${data}`);
+    res.status(500).send('Internal Server Error');
+  });
+
+  // Obsėrvas vaikinio proceso baigčiai
+  pythonProcess.on('close', (code) => {
+    if (code !== 0) {
+      console.error(`Python process exited with code ${code}`);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+});
+
+
+app.get('/training', (req,res)=>{
+    res.render('page')
+})
+
+
+
 
 app.listen(3000, () => {
     console.log('Serving on port 3000')

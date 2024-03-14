@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .correct {
+          background-color: green;
+        }
+
+        .incorrect {
+            background-color: red;
+          }
+      </style>
+</head>
+<body>
+    <button id="start">Start</button>
+    <audio controls id="audioPlayer"></audio>
+    <p id="parameter"></p>
+    <div id="buttons">
+        <button class="btn1"></button>
+        <button class="btn2"></button>
+    </div>
+    <a href="/training">Next</a>
+
+    <script>
+        function generateRandomNumber() {
+            // Sugeneruoti atsitiktinį skaičių nuo -1 iki 1
+            const randomNumber = Math.random() * 2 - 1;         
+            // Apskritinti skaičių iki 1 decimalo taško
+            const roundedNumber = Math.round(randomNumber * 10) / 10;       
+            // Paskaičiuoti žingsnio dydį (0.2) kartojant iš apvalinto skaičiaus
+            const stepSize = 0.1;
+            const steppedNumber = Math.round(roundedNumber / stepSize) * stepSize;
+            // Suapvalinti iki dviejų skaičių po kablelio ir konvertuoti į string formatą
+            const roundedSteppedNumber = steppedNumber.toFixed(2);
+            // Konvertuoti atgal į skaičių
+            return parseFloat(roundedSteppedNumber);
+        }
+
+        function data(){
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/processAudio?number=${number}`, true);
+            xhr.responseType = 'blob';
+
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    const blob = this.response;
+                    const objectURL = URL.createObjectURL(blob);
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.src = objectURL;
+   
+                    audioPlayer.play().catch((e)=>{ console.log(e)});
+                    audioPlayer.loop = true; 
+                    const param = document.getElementById('parameter');
+                    param.textContent = number.toString()
+                    
+                    const btn1 = document.querySelector('.btn1')
+                    const btn2 = document.querySelector('.btn2')
+
+                    btn1.value = number.toString();
+                    btn1.textContent = number.toString();
+
+                    btn2.value = (number + 1).toString();
+                    btn2.textContent = (number + 1).toString();
+
+                
+                }
+            };
+            xhr.send();
+        }
+
+
+        number = generateRandomNumber()
+        //console.log(random)
+       // document.getElementById('start').addEventListener('click', function() {
+            document.addEventListener('DOMContentLoaded', function() {
+            data()
+
+            const buttons = document.getElementById('buttons');
+            buttons.addEventListener('click', (event)=>{
+                if(event.target.value == number){
+                    event.target.classList.toggle("correct");
+                }else{
+                    event.target.classList.toggle("incorrect");
+                }
+                
+   
+            }, {once : true})
+            
+        });
+        
+    </script>
+</body>
+</html>
