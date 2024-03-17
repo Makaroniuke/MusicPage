@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Wave Player</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <style>
+    #knob, #knob2 {
+      -webkit-appearance: none;
+      width: 200px;
+      height: 10px;
+      background: #000000;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+  }
+  
+  #knob::-webkit-slider-thumb,  #knob2::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+  }
+  
+  #knob::-moz-range-thumb, #knob2::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+  }
+  
+      </style>
+  </style>
+  </head>
+<body>
+  <button id="play-btn">Play</button>
+
+  <label class="switch">
+    <input id="change-wave-btn" type="checkbox" checked>
+    <span class="slider round"></span>
+  </label>
+ 
+  <button onclick="sineWave()">Play Sine Wave</button>
+  <button onclick="playSquareWave()">Play Square Wave</button>
+
+    
+<style>
+  .row{
+    border: 2px solid grey;
+    background-color: #d3d3d3;
+    padding: 30px;
+  }
+</style>
+
+  <div class="container">
+    <br/>
+    <br/>
+    <br/>
+    <div class="row">
+      <div class="col">
+        <select name="wave" id="waves">
+          <option value="square">square</option>
+          <option value="sine">sine</option>
+          <option value="triangle ">triangle </option>
+        </select>
+        <div id="knob-value">0.40</div>
+        <input type="range" id="knob" min="0" max="1" step="0.2" value="0.4">
+      </div>
+      <div class="col">
+        <select name="wave" id="waves2">
+          <option value="square">square</option>
+          <option value="sine">sine</option>
+        </select>
+        <div id="knob-value2">0.40</div>
+        <input type="range" id="knob2" min="0" max="1" step="0.2" value="0.4">
+      </div>
+      <div class="col">
+        <button onclick="playSineAndSquare()">Play Sine and Square Wave</button>
+      </div>
+    </div>
+  </div>
+
+  
+
+  <script>
+    const knob = document.getElementById("knob");
+    const knob2 = document.getElementById("knob2");
+    const knobValue = document.getElementById("knob-value");
+    const knobValue2 = document.getElementById("knob-value2");
+
+    
+    // Display initial value
+    knobValue.textContent = knob.value;
+    knobValue2.textContent = knob2.value;
+    
+    // Update value as knob is adjusted
+    knob.addEventListener("input", function() {
+        const value = knob.value;
+        knobValue.textContent = value;
+    });
+
+    knob2.addEventListener("input", function() {
+      const value = knob2.value;
+      knobValue2.textContent = value;
+    });
+
+    let volume = 0.5; // Default volume
+
+    function updateVolume(value) {
+      volume = value;
+    }
+
+    function sineWave(){
+       // Create AudioContext
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Create an empty stereo audio buffer at the sample rate of the AudioContext
+  const channels = 2; // stereo
+  const sampleRate = audioContext.sampleRate;
+  const duration = 2; // seconds
+  const frameCount = sampleRate * duration;
+  const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+
+  // Fill the buffer with a triangle wave
+  for (let channel = 0; channel < channels; channel++) {
+    // This gives us the actual array that contains the data
+    const nowBuffering = audioBuffer.getChannelData(channel);
+    for (let i = 0; i < frameCount; i++) {
+      // audio needs to be in [-1.0; 1.0]
+      //const period = sampleRate / 440; // 440Hz frequency
+      //const value =  (i / frameCount) * 2 - 1; // Triangle wave calculation
+      const period = sampleRate / 440; // 440Hz frequency
+      const value = ((i % period) / period) * 2 - 1;
+      nowBuffering[i] = value;
+    }
+  }
+
+  // Create an audio source node
+  const source = audioContext.createBufferSource();
+  source.buffer = audioBuffer;
+
+  // Connect the source to the output (speakers)
+  source.connect(audioContext.destination);
+
+  // Play the sound
+  source.start();
+    }
+
+    function playSineAndSquare() {
+      const osc1 = document.getElementById("waves").value
+      const osc2 = document.getElementById("waves2").value
+      // Create AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+      // Create an empty stereo audio buffer at the sample rate of the AudioContext
+      const channels = 2; // stereo
+      const sampleRate = audioContext.sampleRate;
+      const duration = 1; // seconds
+      const frameCount = sampleRate * duration;
+      
+      // Create an empty audio buffer for both waves
+      const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+      console.log(osc1)
+      console.log(osc2)
+      // Fill the buffer with both sine and square waves
+      for (let channel = 0; channel < channels; channel++) {
+        const nowBuffering = audioBuffer.getChannelData(channel);
+        for (let i = 0; i < frameCount; i++) {
+          let value1, value2 = 0
+          switch(String(osc1)){
+            case 'sine':{
+                value1 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * knobValue.textContent; // Sine wave  
+                break;     
+            }   
+            case 'square':{
+              value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * knobValue.textContent; // Square wave   
+              break; 
+            }
+            case 'triangle':{
+              //value1 = (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * 440 * i / sampleRate)) * knobValue.textContent;
+              const period = sampleRate / 440; // 440Hz frequency
+               value1 = ((i % period) / period) * 2 - 1;
+            }
+          }
+
+          switch(osc2){
+            case 'sine':
+               value2 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * knobValue2.textContent; // Sine wave    
+               break;        
+            case 'square':
+             value2 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * knobValue2.textContent; // Square wave     
+          }
+          // Combine both waveforms by averaging them
+          nowBuffering[i] = (value1 + value2) / 2  ;
+        }
+      }
+    
+      // Create an audio source node
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+    
+      // Connect the source to the output (speakers)
+      source.connect(audioContext.destination);
+    
+      // Play the sound
+      source.start();
+    }
+
+    function playSquareWave() {
+      // Create AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+      // Create an empty stereo audio buffer at the sample rate of the AudioContext
+      const channels = 2; // stereo
+      const sampleRate = audioContext.sampleRate;
+      const duration = 2; // seconds
+      const frameCount = sampleRate * duration;
+      const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+    
+      // Fill the buffer with a square wave
+      for (let channel = 0; channel < channels; channel++) {
+        // This gives us the actual array that contains the data
+        const nowBuffering = audioBuffer.getChannelData(channel);
+        for (let i = 0; i < frameCount; i++) {
+          // audio needs to be in [-1.0; 1.0]
+          nowBuffering[i] = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume; // 440Hz frequency
+        }
+      }
+    
+      // Create an audio source node
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+    
+      // Connect the source to the output (speakers)
+      source.connect(audioContext.destination);
+    
+      // Play the sound
+      source.start();
+    }
+  function playSineWave() {
+    // Create AudioContext
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  
+    // Create an empty stereo audio buffer at the sample rate of the AudioContext
+    const channels = 2; // stereo
+    const sampleRate = audioContext.sampleRate;
+    const duration = 2; // seconds
+    const frameCount = sampleRate * duration;
+    const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+  
+    // Fill the buffer with a sine wave
+    for (let channel = 0; channel < channels; channel++) {
+      // This gives us the actual array that contains the data
+      const nowBuffering = audioBuffer.getChannelData(channel);
+      for (let i = 0; i < frameCount; i++) {
+        // audio needs to be in [-1.0; 1.0]
+        nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+      }
+    }
+  
+    // Create an audio source node
+    const source = audioContext.createBufferSource();
+    source.buffer = audioBuffer;
+  
+    // Connect the source to the output (speakers)
+    source.connect(audioContext.destination);
+  
+    // Play the sound
+    source.start();
+  }
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
