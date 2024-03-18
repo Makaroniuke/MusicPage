@@ -61,8 +61,11 @@
     <br/>
     <br/>
     <br/>
+    <button onclick="start()">Start</button>
+    <button id="generateWaves">Listen generated sound</button>
     <div class="row">
       <div class="col">
+        <div>Oscillator 1</div>
         <select name="wave" id="waves">
           <option value="square">square</option>
           <option value="sine">sine</option>
@@ -72,6 +75,7 @@
         <input type="range" id="knob" min="0" max="1" step="0.2" value="0.4">
       </div>
       <div class="col">
+        <div>Oscillator 2</div>
         <select name="wave" id="waves2">
           <option value="square">square</option>
           <option value="sine">sine</option>
@@ -80,10 +84,10 @@
         <div id="knob-value2">0.40</div>
         <input type="range" id="knob2" min="0" max="1" step="0.2" value="0.4">
       </div>
-
       <div class="col">
         <select name="wave" id="filter">
-          <option value="bypass">bypass</option>
+          <option data-image-="" value="bypass">          
+            bypass</option>
           <option value="lowpass">lowpass</option>
           <option value="highpass">highpass</option>
         </select>
@@ -91,22 +95,30 @@
         <input type="range" id="knob3" min="100" max="10000" step="4000" value="0">
       </div>
       <div class="col">
-        <button onclick="playSineAndSquare()">Play Sine and Square Wave</button>
+        <button onclick="playWave()">Play</button>
       </div>
     </div>
 <div class="row">
+  <div class="">Envelope</div>
   <div class="col-1">
-    <input type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div id="knob-value4">0</div>
+    <input type="range"  orient="vertical" id="knob4" min="0" max="2" step="0.5" value="0">
+    <div>A</div>
   </div>
   <div class="col-1">
     <input type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>D</div>
     </div>
   <div class="col-1">
     <input type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>S</div>
   </div>
   <div class="col-1">
     <input type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>R</div>
   </div>
+
+  <button onclick="checkValues()">Check</button>
 
 </div>
 
@@ -129,15 +141,21 @@
     const knob = document.getElementById("knob");
     const knob2 = document.getElementById("knob2");
     const knob3 = document.getElementById("knob3");
+    const knob4 = document.getElementById("knob4");
     const knobValue = document.getElementById("knob-value");
     const knobValue2 = document.getElementById("knob-value2");
     const knobValue3 = document.getElementById("knob-value3");
+    const knobValue4 = document.getElementById("knob-value4");
+
+    Math.floor(Math.random() * 11);
+
 
     
     // Display initial value
     knobValue.textContent = knob.value;
     knobValue2.textContent = knob2.value;
     knobValue3.textContent = knob3.value;
+    knobValue4.textContent = knob4.value;
     
     // Update value as knob is adjusted
     knob.addEventListener("input", function() {
@@ -155,62 +173,48 @@
       knobValue3.textContent = value;
     });
 
-    let volume = 0.5; // Default volume
-
-    function updateVolume(value) {
-      volume = value;
-    }
-
-    function sineWave(){
-       // Create AudioContext
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
-  // Create an empty stereo audio buffer at the sample rate of the AudioContext
-  const channels = 2; // stereo
-  const sampleRate = audioContext.sampleRate;
-  const duration = 1; // seconds
-  const frameCount = sampleRate * duration;
-  const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
-// Define envelope parameters
-const attackTime = 1; // Attack time in seconds
-const attackSamples = attackTime * sampleRate; // Convert attack time to samples
+    knob4.addEventListener("input", function() {
+      const value = knob4.value;
+      knobValue4.textContent = value;
+    });
 
 
-// Fill the buffer with a sound wave with attack envelope
-for (let channel = 0; channel < channels; channel++) {
-  // This gives us the actual array that contains the data
-  const nowBuffering = audioBuffer.getChannelData(channel);
-  for (let i = 0; i < frameCount; i++) {
-    // Apply attack envelope
-    if (i < attackSamples) {
-      // Linearly interpolate the amplitude from 0 to 1 during the attack period
-      nowBuffering[i] = (i / attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
-    } else {
-      // Once attack period is over, maintain maximum amplitude
-      nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
-    }
+    
+
+    const waves = ['sine', 'saw', 'square']
+    const filters = ['bypass', 'lowpass', 'highpass']
+
+    function generateRandomNumber() {
+      // Sugeneruoti atsitiktinį skaičių nuo -1 iki 1
+      const randomNumber = Math.random() * 2;
+      // Apskritinti skaičių iki 1 decimalo taško
+      const roundedNumber = Math.round(randomNumber * 10) / 10;       
+      // Paskaičiuoti žingsnio dydį (0.2) kartojant iš apvalinto skaičiaus
+      const stepSize = 0.1;
+      const steppedNumber = Math.round(roundedNumber / stepSize) * stepSize;
+      // Suapvalinti iki dviejų skaičių po kablelio ir konvertuoti į string formatą
+      const roundedSteppedNumber = steppedNumber.toFixed(2);
+      // Konvertuoti atgal į skaičių
+      return parseFloat(roundedSteppedNumber);
   }
-}
 
-  const lowpassFilter = audioContext.createBiquadFilter();
-  lowpassFilter.type = 'lowpass';
-  lowpassFilter.frequency.value = 1000
+    function start(){
+      const soundWave1 = waves[(Math.floor(Math.random() * waves.length))]
+      const soundWave2 = waves[(Math.floor(Math.random() * waves.length))]
+      const volume1 = generateRandomNumber()
+      const volume2 = generateRandomNumber()
+      const filter = 'bypass'
+      const filterFrequency = 0
+      const attack = 0
 
-  // Create an audio source node
-  const source = audioContext.createBufferSource();
-  source.buffer = audioBuffer;
-
-  source.connect(lowpassFilter);
-  lowpassFilter.connect(audioContext.destination);
-
-  // Connect the source to the output (speakers)
-  //source.connect(audioContext.destination);
-
-  // Play the sound
-  source.start();
+      return [soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack]
     }
 
-    function playSineAndSquare() {
+    let [soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack] = start()
+    
+    console.log(soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack)
+
+    function playWave() {
       const osc1 = document.getElementById("waves").value
       const osc2 = document.getElementById("waves2").value
       const filter = document.getElementById("filter").value
@@ -222,62 +226,18 @@ for (let channel = 0; channel < channels; channel++) {
       const sampleRate = audioContext.sampleRate;
       const duration = 1; // seconds
       const frameCount = sampleRate * duration;
-      
+   
+      const attackTime = knobValue4.textContent; // Attack time in seconds
       // Create an empty audio buffer for both waves
       const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
-      console.log(osc1)
-      console.log(osc2)
       // Fill the buffer with both sine and square waves
       for (let channel = 0; channel < channels; channel++) {
         const nowBuffering = audioBuffer.getChannelData(channel);
         console.log('loop 1')
         for (let i = 0; i < frameCount; i++) {
-          if(i === 2){
-            console.log('heree')
-
-          }
-          let value1, value2 = 0
-          switch(String(osc1)){
-            case 'sine':{
-              if(i === 2){
-                console.log('in sine')
-    
-              }
-              value1 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * knobValue.textContent; // Sine wave  
-              break;     
-            }   
-            case 'square':{
-              if(i === 2){
-                console.log('in square')
-    
-              }
-              value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * knobValue.textContent; // Square wave   
-              break; 
-            }
-            case 'saw':{
-              if(i === 2){
-                console.log('in saw')
-    
-              }
-              //value1 = (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * 440 * i / sampleRate)) * knobValue.textContent;
-              const period = sampleRate / 440; // 440Hz frequency
-               value1 = (((i % period) / period) * 2 - 1) * knobValue.textContent;
-            }
-          }
-
-          switch(osc2){
-            case 'sine':
-                value2 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * knobValue2.textContent; // Sine wave    
-                break;        
-            case 'square':
-                value2 = Math.  sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * knobValue2.textContent; // Square wave   
-                break;  
-            case 'saw':{          
-              //value1 = (2 / Math.PI) * Math.asin(Math.sin(2 * Math.PI * 440 * i / sampleRate)) * knobValue.textContent;
-                const period = sampleRate / 440; // 440Hz frequency
-                value2 = (((i % period) / period) * 2 - 1) * knobValue2.textContent;
-            }
-          }
+          const value1 = createWave(i, osc1, knobValue.textContent,attackTime, sampleRate)
+          const value2 = createWave(i, osc2, knobValue2.textContent,attackTime, sampleRate)
+      
           // Combine both waveforms by averaging them
           nowBuffering[i] = (value1 + value2) / 2  ;
         }
@@ -286,8 +246,7 @@ for (let channel = 0; channel < channels; channel++) {
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
 
-      if(filter !== 'bypass'){
-      
+      if(filter !== 'bypass'){  
         const lowpassFilter = audioContext.createBiquadFilter();
         lowpassFilter.type = filter;
         lowpassFilter.frequency.value = knobValue3.textContent
@@ -296,80 +255,149 @@ for (let channel = 0; channel < channels; channel++) {
       }else{
         source.connect(audioContext.destination);
       }
-      // Create an audio source node
-      
-    
-      // Connect the source to the output (speakers)
-      //source.connect(audioContext.destination);
-
-      
-    
-      // Play the sound
       source.start();
     }
 
-    function playSquareWave() {
+
+    document.getElementById('generateWaves').addEventListener('click', ()=>{
+      generateWaves(soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack)
+    })
+
+    
+    function generateWaves(soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack) {
       // Create AudioContext
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
       // Create an empty stereo audio buffer at the sample rate of the AudioContext
       const channels = 2; // stereo
       const sampleRate = audioContext.sampleRate;
-      const duration = 2; // seconds
+      const duration = 1; // seconds
       const frameCount = sampleRate * duration;
+
+      // Create an empty audio buffer for both waves
       const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
-    
-      // Fill the buffer with a square wave
+      // Fill the buffer with both sine and square waves
       for (let channel = 0; channel < channels; channel++) {
-        // This gives us the actual array that contains the data
         const nowBuffering = audioBuffer.getChannelData(channel);
         for (let i = 0; i < frameCount; i++) {
-          // audio needs to be in [-1.0; 1.0]
-          nowBuffering[i] = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume; // 440Hz frequency
+          const value1 = createWave(i, soundWave1, volume1, attack, sampleRate)
+          const value2 = createWave(i, soundWave2, volume2, attack, sampleRate)
+      
+          // Combine both waveforms by averaging them
+          nowBuffering[i] = (value1 + value2) / 2  ;
         }
       }
-    
-      // Create an audio source node
+
       const source = audioContext.createBufferSource();
       source.buffer = audioBuffer;
-    
-      // Connect the source to the output (speakers)
-      source.connect(audioContext.destination);
-    
-      // Play the sound
-      source.start();
-    }
-  function playSineWave() {
-    // Create AudioContext
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  
-    // Create an empty stereo audio buffer at the sample rate of the AudioContext
-    const channels = 2; // stereo
-    const sampleRate = audioContext.sampleRate;
-    const duration = 2; // seconds
-    const frameCount = sampleRate * duration;
-    const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
-  
-    // Fill the buffer with a sine wave
-    for (let channel = 0; channel < channels; channel++) {
-      // This gives us the actual array that contains the data
-      const nowBuffering = audioBuffer.getChannelData(channel);
-      for (let i = 0; i < frameCount; i++) {
-        // audio needs to be in [-1.0; 1.0]
-        nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+
+      if(filter !== 'bypass'){  
+        const lowpassFilter = audioContext.createBiquadFilter();
+        lowpassFilter.type = filter;
+        lowpassFilter.frequency.value = 0
+        source.connect(lowpassFilter);
+        lowpassFilter.connect(audioContext.destination);
+      }else{
+        source.connect(audioContext.destination);
       }
+
+
+        source.start();
+
+      
     }
-  
-    // Create an audio source node
-    const source = audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-  
-    // Connect the source to the output (speakers)
-    source.connect(audioContext.destination);
-  
-    // Play the sound
-    source.start();
-  }
+
+
+    function createWave(i, osc1, volume, attack, sampleRate){
+      let value1 = 0
+      
+      const attackSamples = attack * sampleRate; // Convert attack time to samples
+      switch(osc1){
+        case 'sine':{
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+          }else{
+            value1 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+          }
+          break;     
+        }   
+        case 'square':{
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Sine wave  
+          }else{
+            value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Square wave   
+          }
+          break;     
+
+        }
+        case 'saw':{
+          const period = sampleRate / 440;
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * (((i % period) / period) * 2 - 1) * volume // Sine wave  
+          }else{
+            value1 = (((i % period) / period) * 2 - 1) * volume             
+          }
+          break;             
+        }
+      }
+      return value1
+    }
+
+
+
+
+
+    
+    function sineWave(){
+      // Create AudioContext
+ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+ // Create an empty stereo audio buffer at the sample rate of the AudioContext
+ const channels = 2; // stereo
+ const sampleRate = audioContext.sampleRate;
+ const duration = 1; // seconds
+ const frameCount = sampleRate * duration;
+ const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+// Define envelope parameters
+const attackTime = 1; // Attack time in seconds
+const attackSamples = attackTime * sampleRate; // Convert attack time to samples
+
+
+// Fill the buffer with a sound wave with attack envelope
+for (let channel = 0; channel < channels; channel++) {
+ // This gives us the actual array that contains the data
+ const nowBuffering = audioBuffer.getChannelData(channel);
+ for (let i = 0; i < frameCount; i++) {
+   // Apply attack envelope
+   if (i < attackSamples) {
+     // Linearly interpolate the amplitude from 0 to 1 during the attack period
+     nowBuffering[i] = (i / attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+   } else {
+     // Once attack period is over, maintain maximum amplitude
+     nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+   }
+ }
+}
+
+ const lowpassFilter = audioContext.createBiquadFilter();
+ lowpassFilter.type = 'lowpass';
+ lowpassFilter.frequency.value = 1000
+
+ // Create an audio source node
+ const source = audioContext.createBufferSource();
+ source.buffer = audioBuffer;
+
+ source.connect(lowpassFilter);
+ lowpassFilter.connect(audioContext.destination);
+
+ // Connect the source to the output (speakers)
+ //source.connect(audioContext.destination);
+
+ // Play the sound
+ source.start();
+   }
+
+
   </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
