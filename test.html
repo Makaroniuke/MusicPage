@@ -55,18 +55,26 @@
     background-color: #d3d3d3;
     padding: 30px;
   }
+
+  .correct {
+    border:2px solid green;
+  }
+
+  .incorrect {
+    border:2px solid red;
+    }
 </style>
 
   <div class="container">
     <br/>
     <br/>
     <br/>
-    <button onclick="start()">Start</button>
+    <button id="start" >Start</button>
     <button id="generateWaves">Listen generated sound</button>
     <div class="row">
       <div class="col">
         <div>Oscillator 1</div>
-        <select name="wave" id="waves">
+        <select class="form-select" name="wave" id="waves">
           <option value="square">square</option>
           <option value="sine">sine</option>
           <option value="saw">saw</option>
@@ -76,7 +84,7 @@
       </div>
       <div class="col">
         <div>Oscillator 2</div>
-        <select name="wave" id="waves2">
+        <select class="form-select" name="wave" id="waves2">
           <option value="square">square</option>
           <option value="sine">sine</option>
           <option value="saw">saw</option>
@@ -118,7 +126,7 @@
     <div>R</div>
   </div>
 
-  <button onclick="checkValues()">Check</button>
+  <button id="checkAnswer">Check</button>
 
 </div>
 
@@ -132,6 +140,63 @@
   <option value="75">75</option>
   <option value="100">100</option>
 </datalist>
+
+<style>
+  body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  .slider::before{
+  background: linear-gradient(0deg, #525252 0%, #373737 100%);
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  box-shadow: 0px -20px 20px #757575,
+  0px 20px 35px #111,
+  inset 0px 5px 6px #979797,
+  inset 0px -5px 6px #242424;
+}
+
+.slider::before .knob{
+  width: 10em;
+  height: 10em;
+  position: relative;
+}
+
+.knob::before, .knob::after, .slider::before{
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.knob::before{
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  box-shadow: 0px 0px 10px #349beb;
+}
+
+.knob::after{
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 130%;
+  height:130%;
+  box-shadow: 0px 0px 10px #349beb,
+  inset 0px 0px 10px #349beb;
+
+}
+</style>
+
+<div class="slider">
+  <div class="knob">
+
+  </div>
+</div>
 
   </div>
 
@@ -149,7 +214,10 @@
 
     Math.floor(Math.random() * 11);
 
+    const oscc1 = document.getElementById("waves")
+    const oscc2 = document.getElementById("waves2")
 
+    
     
     // Display initial value
     knobValue.textContent = knob.value;
@@ -207,17 +275,24 @@
       const filterFrequency = 0
       const attack = 0
 
-      return [soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack]
+      return [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack]
     }
 
-    let [soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack] = start()
+    let soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack = 0
+
+    document.getElementById('start').addEventListener('click', ()=>{
+     [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack] = start()
+     console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack)
+    })
+
     
-    console.log(soundWave1, soundWave2, volume1, volume2, filter, filterFrequency, attack)
+    
+    
 
     function playWave() {
       const osc1 = document.getElementById("waves").value
-      const osc2 = document.getElementById("waves2").value
-      const filter = document.getElementById("filter").value
+    const osc2 = document.getElementById("waves2").value
+    const filter = document.getElementById("filter").value
       // Create AudioContext
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
@@ -342,6 +417,23 @@
       }
       return value1
     }
+
+    function checkAnswer(){
+      const osc1 = document.getElementById("waves").value
+      const osc2 = document.getElementById("waves2").value
+      const filter = document.getElementById("filter").value
+      const a = (osc1 === soundWave1) ? oscc1.classList.toggle("correct") : oscc1.classList.toggle("incorrect")
+      const b = (osc2 === soundWave2) ? oscc2.classList.toggle("correct") : oscc2.classList.toggle("incorrect")
+
+
+
+    }
+
+    document.getElementById('checkAnswer').addEventListener('click', ()=>{
+      checkAnswer()
+    })
+
+
 
 
 
