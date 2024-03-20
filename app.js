@@ -118,6 +118,13 @@ app.get('/training', (req,res)=>{
     res.render('page')
 })
 
+app.get('/listening', (req,res)=>{
+    res.render('test')
+})
+
+
+
+
 
 
 

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dual Wave Player</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <style>
+    #knob, #knob2 {
+
+      width: 200px;
+      height: 10px;
+      background: #000000;
+      outline: none;
+      opacity: 0.7;
+      -webkit-transition: .2s;
+      transition: opacity .2s;
+  }
+  
+  #knob::-webkit-slider-thumb,  #knob2::-webkit-slider-thumb {
+
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+  }
+  
+  #knob::-moz-range-thumb, #knob2::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: #4CAF50;
+      cursor: pointer;
+  }
+  
+      </style>
+  </style>
+  </head>
+<body onload="start()">
+
+  <%- include('partials/nav') %>
+
+    
+<style>
+  .border{
+    border: 2px solid grey;
+    background-color: #333;
+    padding: 30px;
+    color: white;
+  }
+  
+  .correct {
+    border:4px solid green;
+  }
+
+  .correctWheel::after {
+  border: 3px solid green !important;
+  }
+
+  .incorrect {
+    border:3px solid red;
+  }
+
+  .incorrectWheel::after {
+  border: 3px solid red !important;
+  }
+
+    
+
+    .control{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.slider::before{
+background: linear-gradient(0deg, #525252 0%, #373737 100%);
+width: 60px;
+height: 60px;
+border-radius: 50%;
+box-shadow: 0px -20px 20px #757575,
+0px 20px 35px #111,
+inset 0px 5px 6px #979797,
+inset 0px -5px 6px #242424;
+}
+
+.slider::before, .knobWheel{
+width: 60px;
+height: 60px;
+position: relative;
+}
+
+.knobWheel::before, .knobWheel::after, .slider::before{
+content: '';
+position: absolute;
+border-radius: 50%;
+}
+
+.knobWheel::before{
+top: 10px;
+left: 50%;
+transform: translateX(-50%);
+width: 5px;
+height: 5px;
+background: #fff;
+box-shadow: 0px 0px 10px #349beb;
+}
+
+.knobWheel::after{
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+border: 3px solid #fff;
+width: 115%;
+height:115%;
+box-shadow: 0px 0px 7px #349beb,
+inset 0px 0px 7px #349beb;
+}
+
+.value{
+
+font-size: 20px;
+margin-top: 30px;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+</style>
+
+  <div class="container" style="width: 70%;">
+    <br/>
+    <br/>
+    <br/>
+    <button id="start">Start</button>
+
+
+    <div class="row border">
+      <div class="col" >
+        <div >Oscillator 1</div>
+        <div>Wave</div>
+        <select class="form-select" name="wave" id="waves">
+          <option value="square">square</option>
+          <option value="sine">sine</option>
+          <option value="saw">saw</option>
+        </select>
+      </div>
+      <div class="col" style="border-right: 2px solid grey;">
+        <div class="text-center" style="padding-bottom: 20px;">Volume</div>
+        <div class="control">
+
+          <div class="slider">
+              <div class="knobWheel">
+              </div>
+            </div>
+            
+          </div>
+          <div class="text-center" id="knob-value" style="padding-top: 20px;">0.40</div>
+          
+      </div>
+      <div class="col">
+        <div class="">Oscillator 2</div>
+
+        <div>Wave</div>
+        <select class="form-select" name="wave" id="waves2">
+          <option value="square">square</option>
+          <option value="sine">sine</option>
+          <option value="saw">saw</option>
+        </select>
+        </div>
+        <div class="col">
+        <div class="text-center" style="padding-bottom: 20px;">Volume</div>
+        <div class="control">
+         
+          <div class="slider">
+              <div class="knobWheel knobWheel2">
+              </div>
+            </div>
+   
+          </div>
+          <div class="text-center" id="knob-value2" style="padding-top: 20px;">0.40</div>
+      </div>
+      
+     
+    </div>
+<div class="row border">
+  <div class="col-3" style="border-right: 2px solid grey;">
+    <div class="text-center">Filter</div>
+    <div  class="center">
+    <select class="form-select"  name="wave" id="filter">
+      <option value="bypass">bypass</option>
+      <option value="lowpass">lowpass</option>
+      <option value="highpass">highpass</option>
+    </select>
+  </div>
+    <br/>
+    <br/>
+    <div class="text-center">Cutoff</div>
+    <br/>
+
+    <div class="control">
+         
+      <div class="slider">
+          <div class="knobWheel knobWheel3">
+          </div>
+        </div>
+
+      </div>
+      <div class="text-center" id="knob-value3" style="padding-top: 20px;">0.40</div>
+
+  </div>
+
+  <style>
+    .fader {
+      -webkit-appearance: none;
+      height: 50%;
+      width: 10px;
+      background: #000;
+      outline: none;
+      border: 2px solid #525252;
+      border-radius: 8px;
+    }
+
+    .fader::-moz-range-thumb {
+      width: 20px;
+      height: 10px;
+      background: #000;
+      cursor: pointer;
+      border: 3px solid white;
+      border-radius: 4px;
+      box-shadow: 0px 0px 10px #349beb, inset 0px 0px 10px #349beb;
+      }
+
+      .button{
+        background-color: white;
+        color: #349beb;
+        border: 2px solid #349beb;
+        box-shadow: 0px 0px 5px #349beb,
+        inset 0px 0px 5px #349beb;
+      }
+
+      select{
+        box-shadow: 0px 0px 5px #349beb,
+        inset 0px 0px 5px #349beb;}
+  
+  </style>
+  
+  <div class="col" style="border-right: 2px solid grey;">
+    <div class="row">
+    <div class="">Envelope</div>
+    <div id="knob-value4">0</div>
+   
+    </div>
+  <div class="row center">
+    <div class="col-2">
+      <input class="fader" type="range"  orient="vertical" id="knob4" min="0" max="2" step="0.5" value="0">
+      <div>A</div>
+    </div>
+  <div class="col-2">
+    <input class="fader"  type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>D</div>
+    </div>
+  <div class="col-2">
+    <input class="fader"  type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>S</div>
+  </div>
+  <div class="col-2">
+    <input class="fader"  type="range"  orient="vertical" id="knob3" min="0" max="2" step="0.5" value="0">
+    <div>R</div>
+  </div>
+</div>
+</div>
+
+<div class="col" >
+  <div class="center"><button class="button btn" id="generateWaves">Listen generated sound</button></div>
+  <br/>
+  <br/>
+  <div class="center"><button class="button btn" onclick="playWave()">Play</button></div>
+  <br/>
+  <br/>
+
+  <div class="center"><button class="button btn " id="checkAnswer">Check</button></div>
+
+  
+</div>
+
+ 
+
+</div>
+
+<br/>
+<br/>
+<br/>
+
+
+
+
+  </div>
+
+  
+
+  <script>
+    const knobWheel = document.querySelector('.knobWheel')
+    const knobWheel2 = document.querySelector('.knobWheel2')
+    const knobWheel3 = document.querySelector('.knobWheel3')
+    const values = {
+      '-120': 0, 
+      '-60': 0.25, 
+      '0': 0.5, 
+      '60': 0.75, 
+      '120': 1, 
+    }
+
+    const valuesFilter = {
+      '-120': 0, 
+      '-60': 1000, 
+      '0': 5000, 
+      '60': 10000, 
+      '120': 20000, 
+    }
+  
+    let angle = 0
+  
+    const angles = [120, 60, 0, -60, -120];
+
+
+
+    
+    const knob4 = document.getElementById("knob4");
+    const knobValue = document.getElementById("knob-value");
+    const knobValue2 = document.getElementById("knob-value2");
+    const knobValue3 = document.getElementById("knob-value3");
+    const knobValue4 = document.getElementById("knob-value4");
+
+
+    const oscc1 = document.getElementById("waves")
+    const oscc2 = document.getElementById("waves2")
+
+    
+    
+    // Display initial value
+    knobValue.textContent = values[angle.toString()];
+    knobValue2.textContent = values[angle.toString()];
+    knobValue3.textContent = valuesFilter[angle.toString()];
+    knobValue4.textContent = knob4.value;
+    
+
+
+
+
+    knob4.addEventListener("input", function() {
+      const value = knob4.value;
+      knobValue4.textContent = value;
+    });
+
+
+    
+
+    const waves = ['sine', 'saw', 'square']
+    const filters = ['bypass', 'lowpass', 'highpass']
+
+    function generateNumber() {
+      // Sugeneruojame atsitiktinį sveiką skaičių nuo 0 iki 4
+      var randomInteger = Math.floor(Math.random() * 5); 
+      // Paverčiame atsitiktinį skaičių į reikiamą intervalą
+      var number = randomInteger * 0.25;
+      return number;
+    }
+    
+  let soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack = 0
+    function start(){
+       soundWave1 = waves[(Math.floor(Math.random() * waves.length))]
+       soundWave2 = waves[(Math.floor(Math.random() * waves.length))]
+       volume1 = generateNumber()
+       volume2 = generateNumber()
+       filterType = 'bypass'
+       filterFrequency = 0
+       attack = 0
+
+       console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack)
+      return [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack]
+    }
+
+    
+
+    document.getElementById('start').addEventListener('load', ()=>{
+     [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack] = start()
+     console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack)
+    })
+
+    
+    
+    
+
+    function playWave() {
+      const osc1 = document.getElementById("waves").value
+    const osc2 = document.getElementById("waves2").value
+    const filter = document.getElementById("filter").value
+      // Create AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+      // Create an empty stereo audio buffer at the sample rate of the AudioContext
+      const channels = 2; // stereo
+      const sampleRate = audioContext.sampleRate;
+      const duration = 1; // seconds
+      const frameCount = sampleRate * duration;
+   
+      const attackTime = knobValue4.textContent; // Attack time in seconds
+      // Create an empty audio buffer for both waves
+      const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+      // Fill the buffer with both sine and square waves
+      for (let channel = 0; channel < channels; channel++) {
+        const nowBuffering = audioBuffer.getChannelData(channel);
+        console.log('loop 1')
+        for (let i = 0; i < frameCount; i++) {
+          const value1 = createWave(i, osc1, knobValue.textContent,attackTime, sampleRate)
+          const value2 = createWave(i, osc2, knobValue2.textContent,attackTime, sampleRate)
+      
+          // Combine both waveforms by averaging them
+          nowBuffering[i] = (value1 + value2) / 2  ;
+        }
+      }
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      if(filter !== 'bypass'){  
+        const lowpassFilter = audioContext.createBiquadFilter();
+        lowpassFilter.type = filter;
+        lowpassFilter.frequency.value = knobValue3.textContent
+        source.connect(lowpassFilter);
+        lowpassFilter.connect(audioContext.destination);
+      }else{
+        source.connect(audioContext.destination);
+      }
+      source.start();
+    }
+
+
+    document.getElementById('generateWaves').addEventListener('click', ()=>{
+      generateWaves(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack)
+    })
+
+    
+    function generateWaves(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack) {
+      // Create AudioContext
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+      // Create an empty stereo audio buffer at the sample rate of the AudioContext
+      const channels = 2; // stereo
+      const sampleRate = audioContext.sampleRate;
+      const duration = 1; // seconds
+      const frameCount = sampleRate * duration;
+
+      // Create an empty audio buffer for both waves
+      const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+      // Fill the buffer with both sine and square waves
+      for (let channel = 0; channel < channels; channel++) {
+        const nowBuffering = audioBuffer.getChannelData(channel);
+        for (let i = 0; i < frameCount; i++) {
+          const value1 = createWave(i, soundWave1, volume1, attack, sampleRate)
+          const value2 = createWave(i, soundWave2, volume2, attack, sampleRate)
+      
+          // Combine both waveforms by averaging them
+          nowBuffering[i] = (value1 + value2) / 2  ;
+        }
+      }
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+
+      if(filterType !== 'bypass'){  
+        const lowpassFilter = audioContext.createBiquadFilter();
+        lowpassFilter.type = filterType;
+        lowpassFilter.frequency.value = 0
+        source.connect(lowpassFilter);
+        lowpassFilter.connect(audioContext.destination);
+      }else{
+        source.connect(audioContext.destination);
+      }
+      source.start();   
+    }
+
+
+    function createWave(i, osc1, volume, attack, sampleRate){
+      let value1 = 0
+      
+      const attackSamples = attack * sampleRate; // Convert attack time to samples
+      switch(osc1){
+        case 'sine':{
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+          }else{
+            value1 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+          }
+          break;     
+        }   
+        case 'square':{
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Sine wave  
+          }else{
+            value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Square wave   
+          }
+          break;     
+
+        }
+        case 'saw':{
+          const period = sampleRate / 440;
+          if (i < attackSamples) {
+            value1 = (i/attackSamples) * (((i % period) / period) * 2 - 1) * volume // Sine wave  
+          }else{
+            value1 = (((i % period) / period) * 2 - 1) * volume             
+          }
+          break;             
+        }
+      }
+      return value1
+    }
+
+    function checkAnswer(){
+      let a
+      const osc1 = document.getElementById("waves").value
+      const osc2 = document.getElementById("waves2").value
+      const filter = document.getElementById("filter")
+      if((osc1 === soundWave1 && osc2 === soundWave2) || (osc2 === soundWave1 && osc1 === soundWave2)){
+        if((knobValue === volume1 && knobValue2 === volume2) || (knobValue === volume2 && knobValue2 === volume1)){
+         a = knobWheel.classList.toggle("correctWheel")
+         a = knobWheel2.classList.toggle("correctWheel")
+        }else{
+          a =(knobValue.textContent === volume1.toString()) ? knobWheel.classList.toggle("correctWheel") : knobWheel.classList.toggle("incorrectWheel")
+          a =(knobValue2.textContent === volume2.toString()) ? knobWheel2.classList.toggle("correctWheel") : knobWheel2.classList.toggle("incorrectWheel")
+        }
+        a =oscc1.classList.toggle("correct")
+        a =oscc2.classList.toggle("correct")
+      }else{
+        a = (osc1 === soundWave1) ? oscc1.classList.toggle("correct") : oscc1.classList.toggle("incorrect")
+        a = (osc2 === soundWave2) ? oscc2.classList.toggle("correct") : oscc2.classList.toggle("incorrect")
+        a =(knobValue.textContent === volume1.toString()) ? knobWheel.classList.toggle("correctWheel") : knobWheel.classList.toggle("incorrectWheel")
+        a =(knobValue2.textContent === volume2.toString()) ? knobWheel2.classList.toggle("correctWheel") : knobWheel2.classList.toggle("incorrectWheel")
+
+      }
+
+      a = (filterType === filter.value)? filter.classList.toggle("correct") :filter.classList.toggle("incorrect")
+
+      a = (filterFrequency.toString() === knobValue3.textContent)? knobWheel3.classList.toggle("correctWheel") : knobWheel3.classList.toggle("incorrectWheel")
+
+     // a =(attack === knobValue3.)? knobWheel3.classList.toggle("correctWheel") : knobWheel3.classList.toggle("incorrectWheel")
+
+
+      
+
+      
+
+    }
+
+    document.getElementById('checkAnswer').addEventListener('click', ()=>{
+      checkAnswer()
+    })
+
+
+
+
+
+
+
+    
+    function sineWave(){
+      // Create AudioContext
+ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+ // Create an empty stereo audio buffer at the sample rate of the AudioContext
+ const channels = 2; // stereo
+ const sampleRate = audioContext.sampleRate;
+ const duration = 1; // seconds
+ const frameCount = sampleRate * duration;
+ const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
+// Define envelope parameters
+const attackTime = 1; // Attack time in seconds
+const attackSamples = attackTime * sampleRate; // Convert attack time to samples
+
+
+// Fill the buffer with a sound wave with attack envelope
+for (let channel = 0; channel < channels; channel++) {
+ // This gives us the actual array that contains the data
+ const nowBuffering = audioBuffer.getChannelData(channel);
+ for (let i = 0; i < frameCount; i++) {
+   // Apply attack envelope
+   if (i < attackSamples) {
+     // Linearly interpolate the amplitude from 0 to 1 during the attack period
+     nowBuffering[i] = (i / attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+   } else {
+     // Once attack period is over, maintain maximum amplitude
+     nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
+   }
+ }
+}
+
+ const lowpassFilter = audioContext.createBiquadFilter();
+ lowpassFilter.type = 'lowpass';
+ lowpassFilter.frequency.value = 1000
+
+ // Create an audio source node
+ const source = audioContext.createBufferSource();
+ source.buffer = audioBuffer;
+
+ source.connect(lowpassFilter);
+ lowpassFilter.connect(audioContext.destination);
+
+ // Connect the source to the output (speakers)
+ //source.connect(audioContext.destination);
+
+ // Play the sound
+ source.start();
+   }
+
+
+  </script>
+
+
+
+
+  <script>
+    
+
+
+// Funkcija, kuri pasuka mygtuką į priekį ar atgal, naudodama pelės ratuką
+function rotateByWheel(event) {
+  event.preventDefault();
+
+    // Tikriname pelės ratuko kryptį
+    const delta = Math.sign(event.deltaY); // Jei delta yra teigiama, tai pelės ratukas pasukamas į priekį, jei ne, tai atgal  
+    // Randame dabartinį mygtuko sukimo kampą
+    const currentAngleIndex = angles.indexOf(Number(event.target.style.transform.replace(/[^0-9\-]/g,'')));  
+    // Atnaujiname mygtuko sukimo kampą, tačiau neleidžiame viršyti ribų
+    let newAngleIndex = currentAngleIndex + delta;
+    if (newAngleIndex < 0) {
+        newAngleIndex = 0;
+    } else if (newAngleIndex >= angles.length) {
+        newAngleIndex = angles.length - 1;
+    }  
+
+    // Nustatome naują mygtuko sukimo kampą
+    angle = angles[newAngleIndex];
+    
+    event.target.style.transform = `rotate(${angles[newAngleIndex]}deg)`;
+}
+
+// Priskiriame sukilimo funkciją pelės ratukui
+knobWheel.addEventListener('wheel', rotateByWheel);
+knobWheel.addEventListener('wheel', ()=>{ knobValue.textContent = values[angle.toString()]});
+
+knobWheel2.addEventListener('wheel', rotateByWheel);
+knobWheel2.addEventListener('wheel', ()=>{ knobValue2.textContent = values[angle.toString()]});
+
+knobWheel3.addEventListener('wheel', rotateByWheel);
+knobWheel3.addEventListener('wheel', ()=>{ knobValue3.textContent = valuesFilter[angle.toString()]});
+
+
+
+
+/*var fader = document.getElementsByClassName(".fader");
+fader.addEventListener("wheel", function(e){
+  if (e.deltaY < 0){
+    fader.valueAsNumber += 0.5;
+  }else{
+    fader.value -= 0.5;
+  }
+  e.preventDefault();
+  e.stopPropagation();
+})*/
+
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
