@@ -137,7 +137,7 @@ app.get('/test', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    res.render('homee')
+    res.render('home')
 })
 
 app.get('*', (req, res) => {
