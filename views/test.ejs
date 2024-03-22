@@ -30,7 +30,7 @@
       </style>
   </style>
   </head>
-<body onload="start()">
+<body onload="easyLevel()">
 
     
 <style>
@@ -119,25 +119,66 @@ margin-top: 30px;
   display: flex;
   justify-content: center;
 }
+
+.selectOption{
+  box-shadow: 0px 0px 7px #349beb,
+  inset 0px 0px 7px #349beb;
+  border: 2px solid #349beb;
+  width: 90px;
+  height: 40px;
+  background: white;
+  color: #349beb;
+  border-radius: .25rem;
+}
+
+.header{
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
 </style>
-<button onclick="playPannedSound()">Test</button>
 
   <div class="container" >
-    <br/>
-    <br/>
+    
+    
+    <div class="row border">
+      <div class="col center header">
+        Current level: <div id="currentLevel"> Easy</div>
+      </div>
+      <div class="col center">
+        <button class="button btn" id="easyLevel">Easy</button>
+      </div>
+      <div class="col center">
+        <button class="button btn" id="hardLevel">Hard</button>
+      </div>
+    </div>
+    <div class="row border">
+      <div class="col center">
+        <button class="button btn" id="generateWaves">Listen generated sound</button>
+      </div>
+      <div class="col center">
+        <button class="button btn" id="playWaves"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-play" viewBox="0 0 16 16">
+          <path d="M10.804 8 5 4.633v6.734zm.792-.696a.802.802 0 0 1 0 1.392l-6.363 3.692C4.713 12.69 4 12.345 4 11.692V4.308c0-.653.713-.998 1.233-.696z"/>
+        </svg></button>
+      </div>
+      <div class="col center">
+        <button class="button btn " id="checkAnswer">Check</button>
+        <button class="button btn " id="nextGeneration">Next</button>
+      </div>
+    </div>
     <div class="row border">
       
 
       <div class="col" >
-        <div style='text-align:center;'>Oscillator 1</div>
+        <div class="header">Oscillator 1</div>
         <div>Wave</div>
-        <select class="form-select" name="wave" id="waves">
+        <select class="form-select selectOption" name="wave" id="waves">
           <option value="square">square</option>
           <option value="sine">sine</option>
           <option value="saw">saw</option>
         </select>
       </div>
-      <div class="col" style="border-right: 2px solid grey;">
+      <div class="col" >
         <div class="text-center" style="padding-bottom: 20px;">Volume</div>
         <div class="control">
 
@@ -150,11 +191,22 @@ margin-top: 30px;
           <div class="text-center" id="knob-value" style="padding-top: 20px;">0.40</div>
           
       </div>
+      <div class="col" style="border-right: 2px solid grey;">
+        <div class="text-center" style="padding-bottom: 20px;">Pitch</div>
+        <div class="control">
+          <div class="slider">
+              <div class="knobWheel knobWheel5">
+              </div>
+            </div>
+   
+          </div>
+          <div class="text-center" id="knob-value5" style="padding-top: 20px;">0.40</div>
+      </div>
       <div class="col">
-        <div class="">Oscillator 2</div>
+        <div class="header">Oscillator 2</div>
 
         <div>Wave</div>
-        <select class="form-select" name="wave" id="waves2">
+        <select class="form-select selectOption" name="wave" id="waves2">
           <option value="square">square</option>
           <option value="sine">sine</option>
           <option value="saw">saw</option>
@@ -163,7 +215,6 @@ margin-top: 30px;
         <div class="col">
         <div class="text-center" style="padding-bottom: 20px;">Volume</div>
         <div class="control">
-         
           <div class="slider">
               <div class="knobWheel knobWheel2">
               </div>
@@ -172,21 +223,33 @@ margin-top: 30px;
           </div>
           <div class="text-center" id="knob-value2" style="padding-top: 20px;">0.40</div>
       </div>
+
+      <div class="col">
+        <div class="text-center" style="padding-bottom: 20px;">Pitch</div>
+        <div class="control">
+          <div class="slider">
+              <div class="knobWheel knobWheel6">
+              </div>
+            </div>
+   
+          </div>
+          <div class="text-center" id="knob-value6" style="padding-top: 20px;">0.40</div>
+      </div>
       
      
     </div>
 <div class="row border">
   <div class="col-3" style="border-right: 2px solid grey;">
-    <div class="text-center">Filter</div>
+    <div class="text-center header">Filter</div>
     <div  class="center">
-    <select class="form-select"  name="wave" id="filter">
+    <select class="form-select selectOption"  name="wave" id="filter">
       <option value="bypass">bypass</option>
       <option value="lowpass">lowpass</option>
       <option value="highpass">highpass</option>
     </select>
    </div>
     <br/>
-    <br/>
+
     <div class="text-center">Cutoff</div>
     <br/>
 
@@ -203,10 +266,12 @@ margin-top: 30px;
   </div>
 
   <div class="col-3" style="border-right: 2px solid grey;">
-    <div class="text-center">Panning</div>
+    <div class="text-center header">Panning</div>
     
     <br/>
     <br/>
+    <br/>
+
     <div class="text-center">Pan</div>
     <br/>
 
@@ -225,7 +290,7 @@ margin-top: 30px;
   <style>
     .fader {
       -webkit-appearance: none;
-      height: 50%;
+      height: 80%;
       width: 10px;
       background: #000;
       outline: none;
@@ -257,10 +322,10 @@ margin-top: 30px;
   
   </style>
   
-  <div class="col" >
+  <div class="col " >
   <div class="row center" >
     <div class="">Envelope</div>
-    <div id="knob-value5">0</div>
+   
     <div class="col-2">
       <input class="fader" type="range"  orient="vertical" id="knob4" min="0" max="2" step="0.5" value="0">
       <div>A</div>
@@ -278,18 +343,7 @@ margin-top: 30px;
     <div>R</div>
   </div>
 </div>
-<div class="row"style="border-top: 2px solid grey;">
 
-  <div class="col" >
-<button class="button btn" id="generateWaves">Listen generated sound</button>
-
-    <button class="button btn" onclick="playWave()">Play</button>
-
-  
-<button class="button btn " id="checkAnswer">Check</button>
-  
-    
-  </div>
   
 </div>
 </div>
@@ -303,8 +357,6 @@ margin-top: 30px;
 <br/>
 
 
-
-
   </div>
 
   
@@ -314,6 +366,9 @@ margin-top: 30px;
     const knobWheel2 = document.querySelector('.knobWheel2')
     const knobWheel3 = document.querySelector('.knobWheel3')
     const knobWheel4 = document.querySelector('.knobWheel4')
+    const knobWheel5 = document.querySelector('.knobWheel5')
+    const knobWheel6 = document.querySelector('.knobWheel6')
+    
     const values = {
       '-120': 0, 
       '-60': 0.25, 
@@ -335,79 +390,95 @@ margin-top: 30px;
       '-60': 1000, 
       '0': 5000, 
       '60': 10000, 
-      '120': 20000, 
+      '120': 15000, 
+    }
+
+    const valuesPitch = {
+      '-120': -12, 
+      '-60': -7, 
+      '0': 0, 
+      '60': 7, 
+      '120': 12, 
+    }
+
+    const valuesSemitones = {
+      '-12': 220, 
+      '-7': 329, 
+      '0': 440, 
+      '7':  659, 
+      '12': 880, 
     }
   
-    let angle = 0
   
+    let angle = 0  
     const angles = [120, 60, 0, -60, -120];
 
-
-
-    
     const knob4 = document.getElementById("knob4");
     const knobValue = document.getElementById("knob-value");
     const knobValue2 = document.getElementById("knob-value2");
     const knobValue3 = document.getElementById("knob-value3");
     const knobValue4 = document.getElementById("knob-value4");
     const knobValue5 = document.getElementById("knob-value5");
-
+    const knobValue6 = document.getElementById("knob-value6");
 
     const oscc1 = document.getElementById("waves")
     const oscc2 = document.getElementById("waves2")
-
-    
-    
+  
     // Display initial value
     knobValue.textContent = values[angle.toString()];
     knobValue2.textContent = values[angle.toString()];
     knobValue3.textContent = valuesFilter[angle.toString()];
     knobValue4.textContent = valuesPanning[angle.toString()];
+    knobValue5.textContent = valuesPitch[angle.toString()];
+    knobValue6.textContent = valuesPitch[angle.toString()];
     
-
-
-
-
-
-
-
-    
+    let soundWave1, soundWave2, volume1, volume2,pitch1, pitch2, filterType, filterFrequency,panning, attack = 0
 
     const waves = ['sine', 'saw', 'square']
     const filters = ['bypass', 'lowpass', 'highpass']
+    const frequencies = [0,1000,5000,10000,15000]
+    const pitch = [-12,-7,0,7,12]
+    const pan = [-1,-0.5,0,0.5,1]
 
     function generateNumber() {
-      // Sugeneruojame atsitiktinį sveiką skaičių nuo 0 iki 4
       var randomInteger = Math.floor(Math.random() * 5); 
-      // Paverčiame atsitiktinį skaičių į reikiamą intervalą
       var number = randomInteger * 0.25;
       return number;
     }
     
-  let soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, attack = 0
-    function start(){
-       soundWave1 = waves[(Math.floor(Math.random() * waves.length))]
-       soundWave2 = waves[(Math.floor(Math.random() * waves.length))]
-       volume1 = generateNumber()
-       volume2 = generateNumber()
-       filterType = 'bypass'
-       filterFrequency = 0
-       panning = 0.5
-       attack = 0
 
-       console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency,panning, attack)
-      return [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, panning, attack]
+    function easyLevel(){
+      soundWave1 = waves[(Math.floor(Math.random() * waves.length))]
+      soundWave2 = waves[(Math.floor(Math.random() * waves.length))]
+      volume1 = generateNumber()
+      volume2 = generateNumber()
+      pitch1 = 0
+      pitch2 = 0
+      filterType = filters[(Math.floor(Math.random() * filters.length))]
+      filterFrequency = frequencies[(Math.floor(Math.random() * frequencies.length))]
+      panning = 0
+      attack = 0
+
+      console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency,panning, attack)
+      return [soundWave1, soundWave2, volume1, volume2,pitch1, pitch2, filterType, filterFrequency, panning, attack]
     }
 
-    
+    function hardLevel(){
+      soundWave1 = waves[(Math.floor(Math.random() * waves.length))]
+      soundWave2 = waves[(Math.floor(Math.random() * waves.length))]
+      volume1 = generateNumber()
+      volume2 = generateNumber()
+      pitch1 = pitch[(Math.floor(Math.random() * pitch.length))]
+      pitch2 = pitch[(Math.floor(Math.random() * pitch.length))]
+      filterType = filters[(Math.floor(Math.random() * filters.length))]
+      filterFrequency = frequencies[(Math.floor(Math.random() * frequencies.length))]
+      panning = pan[(Math.floor(Math.random() * pan.length))]
+      attack = 0
 
-    document.getElementById('generateWaves').addEventListener('load', ()=>{
-     [soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency,panning, attack] = start()
-     console.log(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency,panning, attack)
-    })
-
-    
-    
+      console.log(soundWave1, soundWave2, volume1, volume2, pitch1, pitch2, filterType, filterFrequency,panning, attack)
+      return [soundWave1, soundWave2, volume1, volume2,pitch1, pitch2, filterType, filterFrequency, panning, attack]
+    }
+  
     
 
     function playWave() {
@@ -423,7 +494,7 @@ margin-top: 30px;
       const duration = 1; // seconds
       const frameCount = sampleRate * duration;
    
-      const attackTime = knobValue5.textContent; // Attack time in seconds
+      const attackTime = 0; // Attack time in seconds
       // Create an empty audio buffer for both waves
       const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
       // Fill the buffer with both sine and square waves
@@ -431,8 +502,8 @@ margin-top: 30px;
         const nowBuffering = audioBuffer.getChannelData(channel);
         console.log('loop 1')
         for (let i = 0; i < frameCount; i++) {
-          const value1 = createWave(i, osc1, knobValue.textContent,attackTime, sampleRate)
-          const value2 = createWave(i, osc2, knobValue2.textContent,attackTime, sampleRate)
+          const value1 = createWave(i, osc1, knobValue.textContent,attackTime, sampleRate, valuesSemitones[knobValue5.textContent])
+          const value2 = createWave(i, osc2, knobValue2.textContent,attackTime, sampleRate, valuesSemitones[knobValue6.textContent])
       
           // Combine both waveforms by averaging them
           nowBuffering[i] = (value1 + value2) / 2  ;
@@ -444,42 +515,32 @@ margin-top: 30px;
 
       
       
+      const panner = audioContext.createStereoPanner();
+      panner.pan.value = knobValue4.textContent // example panning to right
+      
 
-        const panner = audioContext.createStereoPanner();
-        panner.pan.value = knobValue4.textContent; // example panning to right
-        
-
-        const pitchShift = audioContext.createPitchShift();
-        // Set pitch shift value (in cents, where 100 cents = 1 semitone)
-        pitchShift.pitch = 300; // Change by 1 semitone up
-        //pitchShift.pitch = -100; // Change by 1 semitone down
-
- 
+      if(filter !== 'bypass'){  
         const lowpassFilter = audioContext.createBiquadFilter();
         lowpassFilter.type = filter;
         lowpassFilter.frequency.value = knobValue3.textContent
-
-        source.connect(lowpassFilter);   
+        source.connect(lowpassFilter);
         lowpassFilter.connect(panner);
-        panner.connect(pitchShift)
-        
+        panner.connect(audioContext.destination);
+      }else{
+        source.connect(panner);
       
-        
-        //lowpassFilter.connect(audioContext.destination);
-        pitchShift.connect(audioContext.destination); 
-
-      
-
-      source.start();
+        panner.connect(audioContext.destination);
+      }
+      source.start(); 
     }
 
 
     document.getElementById('generateWaves').addEventListener('click', ()=>{
-      generateWaves(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency,panning, attack)
+      generateWaves(soundWave1, soundWave2, volume1, volume2,pitch1, pitch2, filterType, filterFrequency, panning, attack)
     })
 
     
-    function generateWaves(soundWave1, soundWave2, volume1, volume2, filterType, filterFrequency, panning, attack) {
+    function generateWaves(soundWave1, soundWave2, volume1, volume2,pitch1, pitch2, filterType, filterFrequency, panning, attack) {
       // Create AudioContext
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     
@@ -495,8 +556,8 @@ margin-top: 30px;
       for (let channel = 0; channel < channels; channel++) {
         const nowBuffering = audioBuffer.getChannelData(channel);
         for (let i = 0; i < frameCount; i++) {
-          const value1 = createWave(i, soundWave1, volume1, attack, sampleRate)
-          const value2 = createWave(i, soundWave2, volume2, attack, sampleRate)
+          const value1 = createWave(i, soundWave1, volume1, attack, sampleRate, valuesSemitones[pitch1])
+          const value2 = createWave(i, soundWave2, volume2, attack, sampleRate, valuesSemitones[pitch2])
       
           // Combine both waveforms by averaging them
           nowBuffering[i] = (value1 + value2) / 2  ;
@@ -509,47 +570,47 @@ margin-top: 30px;
 
       const panner = audioContext.createStereoPanner();
       panner.pan.value = panning // example panning to right
-      source.connect(panner);
+      
 
       if(filterType !== 'bypass'){  
         const lowpassFilter = audioContext.createBiquadFilter();
         lowpassFilter.type = filterType;
-        lowpassFilter.frequency.value = 0
+        lowpassFilter.frequency.value = filterFrequency
         source.connect(lowpassFilter);
-        lowpassFilter.connect(audioContext.destination);
+        lowpassFilter.connect(panner);
+        panner.connect(audioContext.destination);
       }else{
-        
-      
-        source.connect(audioContext.destination);
+        source.connect(panner);
+        panner.connect(audioContext.destination);
       }
       source.start();   
     }
 
 
-    function createWave(i, osc1, volume, attack, sampleRate){
+    function createWave(i, osc1, volume, attack, sampleRate, pitch){
       let value1 = 0
       
       const attackSamples = attack * sampleRate; // Convert attack time to samples
       switch(osc1){
         case 'sine':{
           if (i < attackSamples) {
-            value1 = (i/attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+            value1 = (i/attackSamples) * Math.sin((i / sampleRate) * 2 * Math.PI * pitch) * volume // Sine wave  
           }else{
-            value1 = Math.sin((i / sampleRate) * 2 * Math.PI * 440) * volume // Sine wave  
+            value1 = Math.sin((i / sampleRate) * 2 * Math.PI * pitch) * volume // Sine wave  
           }
           break;     
         }   
         case 'square':{
           if (i < attackSamples) {
-            value1 = (i/attackSamples) * Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Sine wave  
+            value1 = (i/attackSamples) * Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * pitch)) * volume // Sine wave  
           }else{
-            value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * 440)) * volume // Square wave   
+            value1 = Math.sign(Math.sin((i / sampleRate) * 2 * Math.PI * pitch)) * volume // Square wave   
           }
           break;     
 
         }
         case 'saw':{
-          const period = sampleRate / 440;
+          const period = sampleRate / pitch;
           if (i < attackSamples) {
             value1 = (i/attackSamples) * (((i % period) / period) * 2 - 1) * volume // Sine wave  
           }else{
@@ -561,7 +622,41 @@ margin-top: 30px;
       return value1
     }
 
-    function checkAnswer(){
+    function checkHardLevel(){
+      let a
+      const osc1 = document.getElementById("waves").value
+      const osc2 = document.getElementById("waves2").value
+      const filter = document.getElementById("filter")
+      if((osc1 === soundWave1 && osc2 === soundWave2) || (osc2 === soundWave1 && osc1 === soundWave2)){
+        if((knobValue === volume1 && knobValue2 === volume2) || (knobValue === volume2 && knobValue2 === volume1)){
+         a = knobWheel.classList.toggle("correctWheel")
+         a = knobWheel2.classList.toggle("correctWheel")
+        }else{
+          a =(knobValue.textContent === volume1.toString()) ? knobWheel.classList.toggle("correctWheel") : knobWheel.classList.toggle("incorrectWheel")
+          a =(knobValue2.textContent === volume2.toString()) ? knobWheel2.classList.toggle("correctWheel") : knobWheel2.classList.toggle("incorrectWheel")
+        }
+        a =oscc1.classList.toggle("correct")
+        a =oscc2.classList.toggle("correct")
+      }else{
+        a = (osc1 === soundWave1) ? oscc1.classList.toggle("correct") : oscc1.classList.toggle("incorrect")
+        a = (osc2 === soundWave2) ? oscc2.classList.toggle("correct") : oscc2.classList.toggle("incorrect")
+        a =(knobValue.textContent === volume1.toString()) ? knobWheel.classList.toggle("correctWheel") : knobWheel.classList.toggle("incorrectWheel")
+        a =(knobValue2.textContent === volume2.toString()) ? knobWheel2.classList.toggle("correctWheel") : knobWheel2.classList.toggle("incorrectWheel")
+
+      }
+
+      a = (filterType === filter.value)? filter.classList.toggle("correct") :filter.classList.toggle("incorrect")
+      a = (filterFrequency.toString() === knobValue3.textContent)? knobWheel3.classList.toggle("correctWheel") : knobWheel3.classList.toggle("incorrectWheel")
+
+      a = (pitch1.toString() === knobValue5.textContent)? knobWheel5.classList.toggle("correctWheel") : knobWheel5.classList.toggle("incorrectWheel")
+      a = (pitch2.toString() === knobValue6.textContent)? knobWheel6.classList.toggle("correctWheel") : knobWheel6.classList.toggle("incorrectWheel")
+
+      a = ( panning.toString()=== knobValue4.textContent)? knobWheel4.classList.toggle("correctWheel") : knobWheel4.classList.toggle("incorrectWheel")
+
+
+    }
+
+    function checkEasyLevel(){
       let a
       const osc1 = document.getElementById("waves").value
       const osc2 = document.getElementById("waves2").value
@@ -588,19 +683,66 @@ margin-top: 30px;
       a = (filterFrequency.toString() === knobValue3.textContent)? knobWheel3.classList.toggle("correctWheel") : knobWheel3.classList.toggle("incorrectWheel")
 
 
-
-
-     // a =(attack === knobValue3.)? knobWheel3.classList.toggle("correctWheel") : knobWheel3.classList.toggle("incorrectWheel")
-
-
-      
-
-      
-
     }
 
+    
+  const easy = document.getElementById('easyLevel')
+  const hard = document.getElementById('hardLevel')
+  const currentLevel = document.getElementById('currentLevel')
+  const nextGeneration = document.getElementById('nextGeneration')
+  const playWaves = document.getElementById('playWaves')
+  let isEasyLevel = true
+
+  easy.addEventListener('click', ()=>{
+    isEasyLevel = true
+    easyLevel()  
+    currentLevel.textContent = ' Easy'
+    easy.classList.toggle('current')
+  })
+
+  hard.addEventListener('click', ()=>{
+    isEasyLevel = false
+    hardLevel()
+    currentLevel.textContent = ' Hard'
+    easy.classList.toggle('current')
+  })
+
+  function restoreColor(){
+    let a;
+    a = knobWheel.classList = 'knobWheel'
+    a = knobWheel2.classList = 'knobWheel'
+    a = knobWheel3.classList = 'knobWheel'
+    a = knobWheel4.classList = 'knobWheel'
+    a = knobWheel5.classList = 'knobWheel'
+    a = knobWheel6.classList = 'knobWheel'
+    a = oscc1.classList = ''
+    a = oscc2.classList = ''
+    a = filter.classList = ''
+  }
+
+  nextGeneration.addEventListener('click', ()=>{   
+    if(isEasyLevel){
+      easyLevel()  
+    }else{
+      hardLevel()
+    }
+    restoreColor()
+  })
+
+  
+
+  playWaves.addEventListener('click', ()=>{
+    playWave()
+    restoreColor()
+  })
+
     document.getElementById('checkAnswer').addEventListener('click', ()=>{
-      checkAnswer()
+      if(isEasyLevel){
+        checkEasyLevel()
+      }
+      else{
+        checkHardLevel()
+      } 
     })
 
 
@@ -659,40 +801,35 @@ for (let channel = 0; channel < channels; channel++) {
  source.start();
    }
 
-
-   function playPannedSound() {
+   function playDelayedSound() {
     // Create AudioContext
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
   
-    // Create an empty stereo audio buffer at the sample rate of the AudioContext
-    const channels = 2; // stereo
+    // Create an empty mono audio buffer at the sample rate of the AudioContext
+    const channels = 1; // mono
     const sampleRate = audioContext.sampleRate;
     const duration = 2; // seconds
     const frameCount = sampleRate * duration;
     const audioBuffer = audioContext.createBuffer(channels, frameCount, sampleRate);
   
     // Fill the buffer with a sine wave
-    for (let channel = 0; channel < channels; channel++) {
-      // This gives us the actual array that contains the data
-      const nowBuffering = audioBuffer.getChannelData(channel);
-      for (let i = 0; i < frameCount; i++) {
-        // audio needs to be in [-1.0; 1.0]
-        nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
-      }
+    const nowBuffering = audioBuffer.getChannelData(0);
+    for (let i = 0; i < frameCount; i++) {
+      // audio needs to be in [-1.0; 1.0]
+      nowBuffering[i] = Math.sin((i / sampleRate) * 2 * Math.PI * 440); // 440Hz frequency
     }
   
     // Create an audio source node
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
   
-    // Create a StereoPannerNode
-    const panner = audioContext.createStereoPanner();
-    // Set panning value (-1 to 1, -1 for left, 0 for center, 1 for right)
-    panner.pan.value = 0.5; // example panning to right
+    // Create a DelayNode
+    const delayNode = audioContext.createDelay();
+    delayNode.delayTime.value = 1; // Delay time in seconds (adjust as needed)
   
-    // Connect the source to the panner, and then connect the panner to the output (speakers)
-    source.connect(panner);
-    panner.connect(audioContext.destination);
+    // Connect the source to the delay node, and then connect the delay node to the output (speakers)
+    source.connect(delayNode);
+    delayNode.connect(audioContext.destination);
   
     // Play the sound
     source.start();
@@ -741,6 +878,16 @@ knobWheel3.addEventListener('wheel', ()=>{ knobValue3.textContent = valuesFilter
 
 knobWheel4.addEventListener('wheel', rotateByWheel);
 knobWheel4.addEventListener('wheel', ()=>{ knobValue4.textContent = valuesPanning[angle.toString()]});
+
+knobWheel5.addEventListener('wheel', rotateByWheel);
+knobWheel5.addEventListener('wheel', ()=>{ knobValue5.textContent = valuesPitch[angle.toString()]});
+
+knobWheel6.addEventListener('wheel', rotateByWheel);
+knobWheel6.addEventListener('wheel', ()=>{ knobValue6.textContent = valuesPitch[angle.toString()]});
+
+
+
+
 
 
 
