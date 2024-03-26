@@ -113,6 +113,30 @@ app.get('/processAudio', (req, res) => {
   });
 });
 
+const Lesson = require('../MusicPage/models/lesson')
+app.get('/lesson', async (req,res)=>{
+    const lessons = await Lesson.find({}).populate('author')
+
+    res.render('bookSession', {lessons})
+})
+
+
+app.post('/lesson',async (req,res)=>{
+    try{
+        const { date, preferences } = req.body
+        const user = await User.findById(req.user.id)
+        
+        const lesson = new Lesson({ date: date, preferences: preferences, author: user })
+        await lesson.save()
+        req.flash('success', 'Congrats! You book a lesson')
+        res.redirect('/lesson')
+    }catch(e){
+        return res.send(e)
+        req.flash('error', 'Something went wrong')
+        return res.redirect(`/lesson`)
+    }
+})
+
 
 app.get('/training', (req,res)=>{
     res.render('page')
@@ -123,17 +147,8 @@ app.get('/listening', (req,res)=>{
 })
 
 
-
-
-
-
-
 app.listen(3000, () => {
     console.log('Serving on port 3000')
-})
-
-app.get('/test', (req, res) => {
-    res.render('home')
 })
 
 app.get('/', (req, res) => {

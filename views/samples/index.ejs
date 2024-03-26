@@ -1,15 +1,38 @@
 <% layout('layouts/boilerplate') %>
 
 
-
-
 <div class="container">
-    <% if(currentUser){ %>
-      <a href="/samples/new" id="articleSubmit">Add New Sample</a>
-    <% } %>
+    
     <div class="sample">
+      <form action="/samples" method="get">
+                  <label class="form-label" for="type">Sample Type</label> 
+        <div class="row">
+
+             <div class="col-3">
+              
+              <select name="type" class="form-control">
+                <option value="All">All</option>
+                <option value="Drums">Drums</option>
+                <option value="Synth">Synth</option>
+                <option value="Vocal">Vocal</option>
+                <option value="Instrument">Instrument</option>
+                <option value="Other">Other</option>
+              </select>
+             </div>
+             <div class="col">
+              <button type="submit" class="btn">Filter</button>
+             </div>
+             <div class="col">
+              <% if(currentUser){ %>
+                <a href="/samples/new" id="articleSubmit">Add New Sample</a>
+              <% } %>
+             </div>
+          
+        </div>
+      </form>
+      <br/>
+      <br/>
       <table class="table" style="width: 100%">
-        
         <tr>
           <th>Play</th>
           <th style="width: 150px;">Artist</th>

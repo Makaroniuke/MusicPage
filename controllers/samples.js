@@ -6,6 +6,11 @@ const { cloudinary } = require('../cloudinary')
 
 
 module.exports.index = async (req, res) => {
+    const{ type} = req.query
+    if(type && type !== 'All'){    
+    const samples = await Sample.find({type: type}).populate('author')
+       return res.render('samples', { samples })
+    }
     const samples = await Sample.find({}).populate('author')
     res.render('samples', { samples })
 }
